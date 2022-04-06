@@ -37,10 +37,10 @@ class StoreGameHistoryRequest extends FormRequest
                 'required', 'integer'
             ],
             'startedAt' => [
-                'required', 'date'
+                'required', 'date', 'before:endedAt'
             ],
             'endedAt' => [
-                'required', 'date'
+                'required', 'date', 'after:startedAt'
             ]
         ];
     }

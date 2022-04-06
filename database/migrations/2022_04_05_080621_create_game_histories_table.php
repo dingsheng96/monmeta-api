@@ -20,7 +20,7 @@ class CreateGameHistoriesTable extends Migration
                 ->cascadeOnDelete();
             $table->string('game_id')->index();
             $table->string('game_name');
-            $table->unsignedBigInteger('points')->default(0);
+            $table->bigInteger('points')->default(0);
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
             $table->timestamps();
