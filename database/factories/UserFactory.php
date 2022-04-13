@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Country;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
 {
@@ -22,12 +23,28 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => $this->faker->name,
+        $data = [
+            'wallet_id' => Str::uuid(),
+            'username' => $this->faker->userName,
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'contact_no' => $this->faker->phoneNumber,
+            'nationality' => $this->faker->randomElement(Country::pluck('id')->toArray()),
         ];
+
+        if ($data['nationality'] == Country::where('code', 'MY')->value('id')) {
+            $data += [
+                'personal_id_no' => random_int(111111111111, 999999999999),
+                'personal_id_type' => Country::ID_TYPE_MYKAD,
+            ];
+        } else {
+            $data += [
+                'personal_id_no' => Str::random(14),
+                'personal_id_type' => Country::ID_TYPE_PASSPORT,
+            ];
+        }
+
+        return $data;
     }
 }

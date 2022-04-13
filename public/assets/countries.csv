@@ -1,0 +1,250 @@
+Name,Code,Personal ID Type
+Afghanistan,AF,passport
+Åland Islands,AX,passport
+Albania,AL,passport
+Algeria,DZ,passport
+American Samoa,AS,passport
+Andorra,AD,passport
+Angola,AO,passport
+Anguilla,AI,passport
+Antarctica,AQ,passport
+Antigua and Barbuda,AG,passport
+Argentina,AR,passport
+Armenia,AM,passport
+Aruba,AW,passport
+Australia,AU,passport
+Austria,AT,passport
+Azerbaijan,AZ,passport
+Bahamas,BS,passport
+Bahrain,BH,passport
+Bangladesh,BD,passport
+Barbados,BB,passport
+Belarus,BY,passport
+Belgium,BE,passport
+Belize,BZ,passport
+Benin,BJ,passport
+Bermuda,BM,passport
+Bhutan,BT,passport
+"Bolivia, Plurinational State of",BO,passport
+"Bonaire, Sint Eustatius and Saba",BQ,passport
+Bosnia and Herzegovina,BA,passport
+Botswana,BW,passport
+Bouvet Island,BV,passport
+Brazil,BR,passport
+British Indian Ocean Territory,IO,passport
+Brunei Darussalam,BN,passport
+Bulgaria,BG,passport
+Burkina Faso,BF,passport
+Burundi,BI,passport
+Cambodia,KH,passport
+Cameroon,CM,passport
+Canada,CA,passport
+Cape Verde,CV,passport
+Cayman Islands,KY,passport
+Central African Republic,CF,passport
+Chad,TD,passport
+Chile,CL,passport
+China,CN,passport
+Christmas Island,CX,passport
+Cocos (Keeling) Islands,CC,passport
+Colombia,CO,passport
+Comoros,KM,passport
+Congo,CG,passport
+"Congo, the Democratic Republic of the",CD,passport
+Cook Islands,CK,passport
+Costa Rica,CR,passport
+Côte d'Ivoire,CI,passport
+Croatia,HR,passport
+Cuba,CU,passport
+Curaçao,CW,passport
+Cyprus,CY,passport
+Czech Republic,CZ,passport
+Denmark,DK,passport
+Djibouti,DJ,passport
+Dominica,DM,passport
+Dominican Republic,DO,passport
+Ecuador,EC,passport
+Egypt,EG,passport
+El Salvador,SV,passport
+Equatorial Guinea,GQ,passport
+Eritrea,ER,passport
+Estonia,EE,passport
+Ethiopia,ET,passport
+Falkland Islands (Malvinas),FK,passport
+Faroe Islands,FO,passport
+Fiji,FJ,passport
+Finland,FI,passport
+France,FR,passport
+French Guiana,GF,passport
+French Polynesia,PF,passport
+French Southern Territories,TF,passport
+Gabon,GA,passport
+Gambia,GM,passport
+Georgia,GE,passport
+Germany,DE,passport
+Ghana,GH,passport
+Gibraltar,GI,passport
+Greece,GR,passport
+Greenland,GL,passport
+Grenada,GD,passport
+Guadeloupe,GP,passport
+Guam,GU,passport
+Guatemala,GT,passport
+Guernsey,GG,passport
+Guinea,GN,passport
+Guinea-Bissau,GW,passport
+Guyana,GY,passport
+Haiti,HT,passport
+Heard Island and McDonald Islands,HM,passport
+Holy See (Vatican City State),VA,passport
+Honduras,HN,passport
+Hong Kong,HK,passport
+Hungary,HU,passport
+Iceland,IS,passport
+India,IN,passport
+Indonesia,ID,passport
+"Iran, Islamic Republic of",IR,passport
+Iraq,IQ,passport
+Ireland,IE,passport
+Isle of Man,IM,passport
+Israel,IL,passport
+Italy,IT,passport
+Jamaica,JM,passport
+Japan,JP,passport
+Jersey,JE,passport
+Jordan,JO,passport
+Kazakhstan,KZ,passport
+Kenya,KE,passport
+Kiribati,KI,passport
+"Korea, Democratic People's Republic of",KP,passport
+"Korea, Republic of",KR,passport
+Kuwait,KW,passport
+Kyrgyzstan,KG,passport
+Lao People's Democratic Republic,LA,passport
+Latvia,LV,passport
+Lebanon,LB,passport
+Lesotho,LS,passport
+Liberia,LR,passport
+Libya,LY,passport
+Liechtenstein,LI,passport
+Lithuania,LT,passport
+Luxembourg,LU,passport
+Macao,MO,passport
+"Macedonia, the Former Yugoslav Republic of",MK,passport
+Madagascar,MG,passport
+Malawi,MW,passport
+Malaysia,MY,mykad
+Maldives,MV,passport
+Mali,ML,passport
+Malta,MT,passport
+Marshall Islands,MH,passport
+Martinique,MQ,passport
+Mauritania,MR,passport
+Mauritius,MU,passport
+Mayotte,YT,passport
+Mexico,MX,passport
+"Micronesia, Federated States of",FM,passport
+"Moldova, Republic of",MD,passport
+Monaco,MC,passport
+Mongolia,MN,passport
+Montenegro,ME,passport
+Montserrat,MS,passport
+Morocco,MA,passport
+Mozambique,MZ,passport
+Myanmar,MM,passport
+Namibia,NA,passport
+Nauru,NR,passport
+Nepal,NP,passport
+Netherlands,NL,passport
+New Caledonia,NC,passport
+New Zealand,NZ,passport
+Nicaragua,NI,passport
+Niger,NE,passport
+Nigeria,NG,passport
+Niue,NU,passport
+Norfolk Island,NF,passport
+Northern Mariana Islands,MP,passport
+Norway,NO,passport
+Oman,OM,passport
+Pakistan,PK,passport
+Palau,PW,passport
+"Palestine, State of",PS,passport
+Panama,PA,passport
+Papua New Guinea,PG,passport
+Paraguay,PY,passport
+Peru,PE,passport
+Philippines,PH,passport
+Pitcairn,PN,passport
+Poland,PL,passport
+Portugal,PT,passport
+Puerto Rico,PR,passport
+Qatar,QA,passport
+Réunion,RE,passport
+Romania,RO,passport
+Russian Federation,RU,passport
+Rwanda,RW,passport
+Saint Barthélemy,BL,passport
+"Saint Helena, Ascension and Tristan da Cunha",SH,passport
+Saint Kitts and Nevis,KN,passport
+Saint Lucia,LC,passport
+Saint Martin (French part),MF,passport
+Saint Pierre and Miquelon,PM,passport
+Saint Vincent and the Grenadines,VC,passport
+Samoa,WS,passport
+San Marino,SM,passport
+Sao Tome and Principe,ST,passport
+Saudi Arabia,SA,passport
+Senegal,SN,passport
+Serbia,RS,passport
+Seychelles,SC,passport
+Sierra Leone,SL,passport
+Singapore,SG,passport
+Sint Maarten (Dutch part),SX,passport
+Slovakia,SK,passport
+Slovenia,SI,passport
+Solomon Islands,SB,passport
+Somalia,SO,passport
+South Africa,ZA,passport
+South Georgia and the South Sandwich Islands,GS,passport
+South Sudan,SS,passport
+Spain,ES,passport
+Sri Lanka,LK,passport
+Sudan,SD,passport
+Suriname,SR,passport
+Svalbard and Jan Mayen,SJ,passport
+Swaziland,SZ,passport
+Sweden,SE,passport
+Switzerland,CH,passport
+Syrian Arab Republic,SY,passport
+"Taiwan, Province of China",TW,passport
+Tajikistan,TJ,passport
+"Tanzania, United Republic of",TZ,passport
+Thailand,TH,passport
+Timor-Leste,TL,passport
+Togo,TG,passport
+Tokelau,TK,passport
+Tonga,TO,passport
+Trinidad and Tobago,TT,passport
+Tunisia,TN,passport
+Turkey,TR,passport
+Turkmenistan,TM,passport
+Turks and Caicos Islands,TC,passport
+Tuvalu,TV,passport
+Uganda,UG,passport
+Ukraine,UA,passport
+United Arab Emirates,AE,passport
+United Kingdom,GB,passport
+United States,US,passport
+United States Minor Outlying Islands,UM,passport
+Uruguay,UY,passport
+Uzbekistan,UZ,passport
+Vanuatu,VU,passport
+"Venezuela, Bolivarian Republic of",VE,passport
+Viet Nam,VN,passport
+"Virgin Islands, British",VG,passport
+"Virgin Islands, U.S.",VI,passport
+Wallis and Futuna,WF,passport
+Western Sahara,EH,passport
+Yemen,YE,passport
+Zambia,ZM,passport
+Zimbabwe,ZW,passport

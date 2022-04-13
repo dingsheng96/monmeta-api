@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGameHistoriesTable extends Migration
+class CreateNftStarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateGameHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('game_histories', function (Blueprint $table) {
+        Schema::create('nft_stars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
+            $table->foreignId('nft_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('game_id')->index();
-            $table->string('game_name');
-            $table->bigInteger('points')->default(0);
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
+            $table->unsignedInteger('quantity')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +31,6 @@ class CreateGameHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('game_histories');
+        Schema::dropIfExists('nft_stars');
     }
 }

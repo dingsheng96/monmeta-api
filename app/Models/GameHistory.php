@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class GameHistory extends Model
+class GameHistory extends Pivot
 {
     use HasFactory, SoftDeletes;
 

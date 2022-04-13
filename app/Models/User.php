@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\GameHistory;
+use App\Models\Nft;
+use App\Models\Country;
+use App\Models\Transaction;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,8 +45,18 @@ class User extends Authenticatable
     ];
 
     // relations
-    public function gameHistories()
+    public function nationality()
     {
-        return $this->hasMany(GameHistory::class, 'user_id', 'id');
+        return $this->belongsTo(Country::class, 'nationality', 'id');
+    }
+
+    public function nfts()
+    {
+        return $this->hasMany(Nft::class, 'nft_id', 'id');
+    }
+
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'sourceable');
     }
 }
