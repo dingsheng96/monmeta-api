@@ -23,7 +23,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'wallet_id', 'first_name', 'last_name', 'username',
-        'email', 'nationality', 'contact_no'
+        'email', 'nationality_id', 'contact_no'
     ];
 
     /**
@@ -47,7 +47,7 @@ class User extends Authenticatable
     // relations
     public function nationality()
     {
-        return $this->belongsTo(Country::class, 'nationality', 'id');
+        return $this->belongsTo(Country::class, 'nationality_id', 'id');
     }
 
     public function nfts()

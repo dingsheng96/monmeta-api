@@ -7,20 +7,46 @@ use Illuminate\Database\Eloquent\Model;
 
 trait HasApiLog
 {
-    public function withApiLog(string $log_message, ?Model $causer = null, string $log_name = 'api')
+    protected $properties = [];
+
+    protected $subject, $causer;
+
+    public function saveApiLog(string $log_message, string $log_name = 'api')
     {
         $activity = activity()
             ->useLog($log_name)
-            ->performedOn($this->model)
-            ->withProperties(request()->all(['_token', '_method']));
+            ->withProperties($this->properties);
 
-        if (is_null($causer)) {
-            $activity = $activity->causedByAnonymous();
-        } else {
-            $activity = $activity->causedBy($causer);
+        $activity = is_null($this->causer)
+            ? $activity->causedByAnonymous()
+            : $activity->causedBy($this->causer);
+
+        if (!is_null($this->subject)) {
+            $activity = $activity->performedOn($this->subject);
         }
 
         $activity->log(ucwords(implode(' ', preg_split('/(?=[A-Z])/', $log_message))));
+
+        return $this;
+    }
+
+    public function setProperties(array $properties = []): self
+    {
+        $this->properties = $properties;
+
+        return $this;
+    }
+
+    public function setSubject(Model $subject): self
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function setCauser(Model $causer = null): self
+    {
+        $this->causer = $causer;
 
         return $this;
     }

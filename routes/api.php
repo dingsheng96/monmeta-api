@@ -17,15 +17,32 @@ use Illuminate\Support\Facades\Route;
 Route::namespace('Api')
     ->group(function () {
 
-        Route::post('oAuth2', 'TokenController@giveOAuth2Token');
+        Route::get('oAuth2', 'TokenController@getOAuth2Token');
+
+        Route::get('countries', 'CountryController@index');
 
         Route::middleware('auth:api')
             ->group(function () {
 
-                Route::prefix('gameHistory')
+                Route::post('register', 'AccountController@register');
+
+                Route::prefix('nft')
                     ->group(function () {
 
-                        Route::post('store', 'GameController@storeGameHistory');
+                        Route::get('profile', 'NftController@profile');
+                        Route::post('update', 'NftController@update');
+
+                        Route::prefix('gameHistory')
+                            ->group(function () {
+                                Route::get('list', 'GameHistoryController@index');
+                                Route::post('store', 'GameHistoryController@store');
+                            });
+
+                        // Route::prefix('financialHistory')
+                        //     ->group(function () {
+                        //         Route::post('list', 'GameController@listGameHistory');
+                        //         Route::post('store', 'GameController@storeGameHistory');
+                        //     });
                     });
             });
     });

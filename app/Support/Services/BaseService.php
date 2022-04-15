@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseService
 {
-    use HasApiLog;
-
-    public $request, $model, $log;
+    public $request, $model;
 
     public function __construct($model)
     {

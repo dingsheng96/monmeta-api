@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Throwable;
+use Illuminate\Support\Facades\Log;
 use App\Support\Facades\ApiResponse;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -42,13 +45,23 @@ class Handler extends ExceptionHandler
     {
         if ($request->expectsJson()) {
 
-            $response = ApiResponse::setMessage($exception->getMessage())
-                ->setError($exception->getTrace());
+            Log::error($exception);
 
-            if ($exception instanceof HttpExceptionInterface) {
+            $response = ApiResponse::setInternalServerErrorStatusCode()
+                ->setError($exception->getTrace())
+                ->setMessage(
+                    !empty($exception->getMessage())
+                        ? $exception->getMessage()
+                        : trans('messages.api.default_error')
+                );
+
+            if ($exception instanceof AuthenticationException) {
+                $response->setUnauthorizedStatusCode();
+            } elseif ($exception instanceof ValidationException) {
+                $response->setUnprocessableEntityStatusCode()
+                    ->setError($exception->errors());
+            } elseif ($exception instanceof HttpExceptionInterface) {
                 $response->setStatusCode($exception->getStatusCode());
-            } else {
-                $response->setStatuscode(500);
             }
 
             return $response->toFailJson();

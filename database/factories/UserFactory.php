@@ -30,10 +30,10 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'contact_no' => $this->faker->phoneNumber,
-            'nationality' => $this->faker->randomElement(Country::pluck('id')->toArray()),
+            'nationality_id' => $this->faker->randomElement(Country::pluck('id')->toArray()),
         ];
 
-        if ($data['nationality'] == Country::where('code', 'MY')->value('id')) {
+        if ($data['nationality_id'] == Country::where('code', 'MY')->value('id')) {
             $data += [
                 'personal_id_no' => random_int(111111111111, 999999999999),
                 'personal_id_type' => Country::ID_TYPE_MYKAD,

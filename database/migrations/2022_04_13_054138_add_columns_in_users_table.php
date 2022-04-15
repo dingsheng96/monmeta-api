@@ -15,7 +15,7 @@ class AddColumnsInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('nationality')
+            $table->foreignId('nationality_id')
                 ->nullable()
                 ->constrained(app(Country::class)->getTable())
                 ->after('contact_no')
@@ -32,7 +32,7 @@ class AddColumnsInUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            $table->dropConstrainedForeignId('nationality');
+            $table->dropConstrainedForeignId('nationality_id');
         });
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Nft;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestOAuth2TokenRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class RequestOAuth2TokenRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->exists();
     }
 
     /**
@@ -24,8 +24,8 @@ class RequestOAuth2TokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'walletId' => [
-                'required', 'string'
+            'nftId' => [
+                'required'
             ]
         ];
     }

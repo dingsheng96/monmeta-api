@@ -6,16 +6,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait HasResponseCode
 {
-    public function setStatusCode($status_code): self
+    public function setStatusCode($statusCode): self
     {
-        $this->status_code = $status_code;
+        $this->statusCode = $statusCode;
 
         return $this;
     }
 
     public function getStatusCode()
     {
-        return $this->status_code;
+        return $this->statusCode;
     }
 
     public function setOkStatusCode(): self

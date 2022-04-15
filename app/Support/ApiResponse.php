@@ -2,13 +2,16 @@
 
 namespace App\Support;
 
+use App\Traits\HasApiLog;
 use App\Traits\HasResponseCode;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiResponse
 {
-    use HasResponseCode;
+    use HasResponseCode,
+        HasApiLog;
 
     /**
      * Api status (if success is true, else false)
@@ -18,7 +21,7 @@ class ApiResponse
     /**
      * HTTP Response Status Code
      */
-    private $status_code = Response::HTTP_OK;
+    private $statusCode = Response::HTTP_OK;
 
     /**
      * Return string $message
@@ -34,6 +37,12 @@ class ApiResponse
      * Return errors
      */
     private $error = [];
+
+    /** Paginations */
+    private $pagination = [];
+
+    /** Enable activity log */
+    private $enableLog = false;
 
     /**
      * Constants
@@ -54,7 +63,7 @@ class ApiResponse
         return $this;
     }
 
-    public function setData(array $data = []): self
+    public function setData(array $data): self
     {
         if (!empty($data)) {
 
@@ -69,7 +78,7 @@ class ApiResponse
         return $this;
     }
 
-    public function setError(array $error = []): self
+    public function setError(array $error): self
     {
         $this->error = $error;
 
@@ -96,17 +105,33 @@ class ApiResponse
 
     public function toArray(): array
     {
-        return [
-            'status'    =>  $this->status,
+        $data = [
+            'status' =>  $this->status,
             'message' => $this->message,
-            'data'      =>  $this->data ?? [],
-            'error'     =>  $this->error ?? []
+        ];
+
+        if (empty($this->error)) {
+            return $data += [
+                'data' =>  $this->data,
+            ];
+        }
+
+        return $data += [
+            'error' =>  $this->error
         ];
     }
 
     public function toJson(): JsonResponse
     {
-        return response()->json($this->toArray(), $this->status_code);
+        if ($this->enableLog) {
+            $this->setProperties([
+                'header' => request()->header(),
+                'request' => request()->except(['_method', '_token', 'password']),
+                'response' => $this->toArray()
+            ])->saveApiLog($this->message);
+        }
+
+        return response()->json($this->toArray() + $this->pagination, $this->statusCode);
     }
 
     public function toSuccessJson(): JsonResponse
@@ -117,5 +142,31 @@ class ApiResponse
     public function toFailJson(): JsonResponse
     {
         return $this->setFailStatus()->toJson();
+    }
+
+    public function withLog(Model $subject, Model $causer = null, $action = 'list')
+    {
+        $this->enableLog = true;
+
+        $this->setSubject($subject)
+            ->setCauser($causer ?? request()->user())
+            ->setMessage(trans('messages.api.' . $action, ['module' => basename(get_class($subject))]));
+
+        return $this;
+    }
+
+    public function setPagination(array $pagination)
+    {
+        if (!empty($pagination)) {
+
+            array_walk_recursive($pagination, function (&$value, $key) {
+
+                $value = is_null($value) ? "" : $value;
+            });
+
+            $this->pagination = $pagination;
+        };
+
+        return $this;
     }
 }

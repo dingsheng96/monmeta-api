@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OAuth2TokenResource extends JsonResource
+class GameHistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,6 @@ class OAuth2TokenResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'requireRegister' => is_null($this->username),
-            'accessToken' => $this->createToken("{$this->wallet_id}'s Token")->accessToken,
-            'user' => (new UserResource($this->load('nationality')))->toArray($request)
-        ];
+        return parent::toArray($request);
     }
 }
