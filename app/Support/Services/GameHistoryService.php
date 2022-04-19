@@ -2,6 +2,9 @@
 
 namespace App\Support\Services;
 
+use App\Models\Nft;
+use App\Models\Game;
+use App\Helpers\Status;
 use App\Models\GameHistory;
 use App\Support\Services\BaseService;
 
@@ -14,18 +17,75 @@ class GameHistoryService extends BaseService
 
     public function store()
     {
-        $this->model->game_id = $this->request->input('gameId');
-        $this->model->game_name = $this->request->input('gameName');
-        $this->model->points = $this->request->input('points');
-        $this->model->started_at = $this->request->input('startedAt');
-        $this->model->ended_at = $this->request->input('endedAt');
+        $game = Game::firstOrCreate(
+            ['uuid' => $this->request->get('gameId')],
+            [
+                'uuid' => $this->request->get('gameId'),
+                'name' => $this->request->get('gameName')
+            ]
+        );
 
-        if ($this->model->isDirty()) {
-            $this->request->user()
-                ->gameHistories()
-                ->save($this->model);
+        $nft = Nft::firstOrCreate(
+            ['token_id' => $this->request->get('nftId')],
+            [
+                'user_id' => $this->request->user()->id,
+                'token_id' => $this->request->get('nftId'),
+                'status' => Status::STATUS_ACTIVE
+            ]
+        );
+
+        return $this->model->create([
+            'game_id' => $game->id,
+            'nft_id' => $nft->id,
+            'room_id' => $this->request->get('roomId'),
+            'game_season_id' => $this->request->get('gameSeasonId'),
+            'points' => $this->request->get('points'),
+            'position' => $this->request->get('position'),
+            'started_at' => $this->request->get('startedAt'),
+            'ended_at' => $this->request->get('endedAt'),
+        ]);
+    }
+
+    public function getUserRanking(Nft $nft): string
+    {
+        $ranking = GameHistory::selectRaw('nft_id, ROUND(((SUM(points)/COUNT(*)) * 100), 2) AS winning_rate, SUM(duration) AS total_durations')
+            ->when(!empty($this->request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $this->request->get('gameSeasonId')))
+            ->groupBy('nft_id')
+            ->orderByDesc('winning_rate')
+            ->orderByDesc('total_durations')
+            ->get()
+            ->search(function ($item, $key) use ($nft) {
+                return $item->nft_id == $nft->id;
+            });
+
+        $ranking += 1;
+
+        switch (substr($ranking, -1)) {
+            case '1':
+                $position = 'st';
+                break;
+            case '2':
+                $position = 'nd';
+            case '3':
+                $position = 'th';
+                if (strlen($ranking) == 1) {
+                    $position = 'rd';
+                }
+                break;
+            default:
+                $position = 'th';
+                break;
         }
 
-        return $this;
+        return $ranking . $position;
+    }
+
+    public function getUserSeasonScore(Nft $nft): int
+    {
+        return (int) GameHistory::selectRaw('nft_id, SUM(points) AS total_game_points')
+            ->where('nft_id', $nft->id)
+            ->when(!empty($this->request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $this->request->get('gameSeasonId')))
+            ->groupBy('nft_id')
+            ->value('total_game_points');
     }
 }

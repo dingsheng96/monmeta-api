@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->longText('hash_id')->index();
+            $table->string('hash_id')->index();
             $table->morphs('sourceable');
             $table->string('type')->index();
             $table->string('status')->index();

@@ -17,12 +17,11 @@ class AccountController extends Controller
 
             $user = $userService
                 ->setRequest($request)
-                ->setModel($request->user())
                 ->storeUserDetails()
                 ->getModel();
 
-            return ApiResponse::withLog($user)
-                ->setMessage('User Register Success!')
+            return ApiResponse::withLog($user, null, 'Registration')
+                ->setMessage('User register successfully!')
                 ->setOkStatusCode()
                 ->toSuccessJson();
         });

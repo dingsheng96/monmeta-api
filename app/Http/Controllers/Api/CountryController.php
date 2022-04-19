@@ -14,7 +14,7 @@ class CountryController extends Controller
     {
         $countries = Country::orderBy('name')->get();
 
-        return ApiResponse::withLog(new Country())
+        return ApiResponse::withLog(new Country(), null, 'Countries')
             ->setOkStatusCode()
             ->setData(CountryResource::collection($countries)->toArray($request))
             ->toSuccessJson();

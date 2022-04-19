@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Traits\HasApiLog;
+use Illuminate\Support\Str;
 use App\Traits\HasResponseCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Model;
@@ -144,13 +145,13 @@ class ApiResponse
         return $this->setFailStatus()->toJson();
     }
 
-    public function withLog(Model $subject, Model $causer = null, $action = 'list')
+    public function withLog(Model $subject = null, Model $causer = null, string $moduleName, $action = 'list')
     {
         $this->enableLog = true;
 
         $this->setSubject($subject)
             ->setCauser($causer ?? request()->user())
-            ->setMessage(trans('messages.api.' . $action, ['module' => basename(get_class($subject))]));
+            ->setMessage(trans('messages.api.' . $action, ['module' => $moduleName]));
 
         return $this;
     }

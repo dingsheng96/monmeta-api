@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\GameHistory;
 
-use App\Traits\FormRequest\HasApiResponse;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGameHistoryRequest extends FormRequest
 {
-    use HasApiResponse;
-
     /**
      * Determine if the user is authorized to make this request.
      *

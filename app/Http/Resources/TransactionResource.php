@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OAuth2TokenResource extends JsonResource
+class TransactionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +15,11 @@ class OAuth2TokenResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'accessToken' => $this->createToken("{$this->wallet_id}'s Token")->accessToken,
+            'transactionHash' => $this->hash_id,
+            'status' => $this->status,
+            'amount' => $this->formatted_amount,
+            'description' => $this->description,
+            'transactionDate' => $this->transaction_date,
         ];
     }
 }

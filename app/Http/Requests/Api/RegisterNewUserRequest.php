@@ -18,7 +18,7 @@ class RegisterNewUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::guard('api')->check();
+        return true;
     }
 
     /**
@@ -29,6 +29,9 @@ class RegisterNewUserRequest extends FormRequest
     public function rules()
     {
         return [
+            'walletId' => [
+                'required', 'string'
+            ],
             'userName' => [
                 'required', 'string',
                 Rule::unique(User::class, 'username')

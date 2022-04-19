@@ -37,7 +37,7 @@ trait HasApiLog
         return $this;
     }
 
-    public function setSubject(Model $subject): self
+    public function setSubject(Model $subject = null): self
     {
         $this->subject = $subject;
 

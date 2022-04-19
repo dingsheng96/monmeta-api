@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Tier;
 use App\Models\User;
+use App\Helpers\Status;
 use App\Models\NftStar;
 use App\Models\NftTier;
+use App\Helpers\DateTime;
 use App\Models\GameHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,15 +33,14 @@ class Nft extends Model
     public function tiers()
     {
         return $this->belongsToMany(Tier::class, NftTier::class, 'nft_id', 'tier_id')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('status');
     }
 
-    public function latestTier()
+    public function currentTier()
     {
-        return $this->tiers()
-            ->orderByDesc('created_at')
-            ->first()
-            ->pivot;
+        return $this->belongsToMany(Tier::class, NftTier::class, 'nft_id', 'tier_id')
+            ->wherePivot('status', Status::STATUS_ACTIVE);
     }
 
     public function stars()
@@ -60,5 +61,59 @@ class Nft extends Model
                 'room_id', 'game_season_id', 'started_at', 'ended_at',
                 'duration', 'points', 'position'
             ]);
+    }
+
+    // attributes
+    public function getCurrentStarsAttribute()
+    {
+        if (is_null($this->stars_sum_quantity)) {
+            return 0;
+        }
+
+        return $this->stars_sum_quantity - $this->currentTier->first()->stars_required;
+    }
+
+    public function getBestScoreAttribute()
+    {
+        return $this->game_histories_max_points ?? 0;
+    }
+
+    public function getWorstScoreAttribute()
+    {
+        return $this->game_histories_min_points ?? 0;
+    }
+
+    public function getAverageScoreAttribute()
+    {
+        return $this->game_histories_avg_points ?? 0;
+    }
+
+    public function getTotalScoreAttribute()
+    {
+        return $this->game_histories_sum_points ?? 0;
+    }
+
+    public function getTotalPlayCountAttribute()
+    {
+        return $this->game_histories_count ?? 0;
+    }
+
+    public function getTotalHoursPlayedAttribute()
+    {
+        if (is_null($this->game_histories_sum_duration)) {
+            return 0;
+        }
+
+        return (new DateTime())->convertFromMillisecondsToReadable($this->game_histories_sum_duration / 1000);
+    }
+
+    public function getWinningRateAttribute()
+    {
+        return ($this->average_score * 100) . '%';
+    }
+
+    public function getCurrentStarsWithTierStarsAttribute()
+    {
+        return $this->current_stars . '/5';
     }
 }

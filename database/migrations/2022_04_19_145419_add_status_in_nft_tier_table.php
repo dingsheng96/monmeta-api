@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNftTierTable extends Migration
+class AddStatusInNftTierTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateNftTierTable extends Migration
      */
     public function up()
     {
-        Schema::create('nft_tier', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('nft_id')
-                ->constrained();
-            $table->foreignId('tier_id')
-                ->constrained();
-            $table->timestamps();
+        Schema::table('nft_tier', function (Blueprint $table) {
+
+            $table->string('status')
+                ->after('tier_id');
         });
     }
 
@@ -30,6 +27,9 @@ class CreateNftTierTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nft_tier');
+        Schema::table('nft_tier', function (Blueprint $table) {
+
+            $table->dropColumn('status');
+        });
     }
 }

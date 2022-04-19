@@ -16,12 +16,10 @@ class CreateGameHistoriesTable extends Migration
         Schema::create('game_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('nft_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
 
             $table->foreignId('game_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
 
             $table->string('room_id')->index();
             $table->string('game_season_id')->index();
@@ -30,7 +28,7 @@ class CreateGameHistoriesTable extends Migration
             $table->unsignedBigInteger('duration')
                 ->nullable()
                 ->default(0)
-                ->comment('in seconds');
+                ->comment('in milliseconds');
             $table->unsignedBigInteger('position')->default(1);
             $table->bigInteger('points')->default(0);
 

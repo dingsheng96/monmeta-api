@@ -14,6 +14,16 @@ class GameHistoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'gameHistoryId' => $this->uuid,
+            'gameName' => $this->game->name,
+            'roomId' => $this->room_id,
+            'gameSeasonId' => $this->game_season_id,
+            'points' => strval($this->points),
+            'position' => strval($this->position),
+            'startedAt' => $this->started_at,
+            'endedAt' => $this->ended_at,
+            'duration' => $this->formatted_duration
+        ];
     }
 }

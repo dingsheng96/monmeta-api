@@ -16,8 +16,7 @@ class CreateNftsTable extends Migration
         Schema::create('nfts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
             $table->string('token_id')->index();
             $table->string('status', 45)->index();
             $table->timestamps();

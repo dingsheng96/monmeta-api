@@ -47,8 +47,10 @@ class Handler extends ExceptionHandler
 
             Log::error($exception);
 
+            $isProduction = app()->isProduction();
+
             $response = ApiResponse::setInternalServerErrorStatusCode()
-                ->setError($exception->getTrace())
+                ->setError(!$isProduction ? $exception->getTrace() : array())
                 ->setMessage(
                     !empty($exception->getMessage())
                         ? $exception->getMessage()

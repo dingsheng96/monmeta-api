@@ -15,34 +15,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::namespace('Api')
+    ->prefix('v1')
     ->group(function () {
 
         Route::get('oAuth2', 'TokenController@getOAuth2Token');
 
+        Route::post('register', 'AccountController@register');
+
         Route::get('countries', 'CountryController@index');
+
+        Route::get('leaderboard', 'LeaderBoardController@index');
 
         Route::middleware('auth:api')
             ->group(function () {
 
-                Route::post('register', 'AccountController@register');
+                Route::prefix('gameHistory')
+                    ->group(function () {
+                        Route::get('list', 'GameHistoryController@index');
+                        Route::post('store', 'GameHistoryController@store');
+                    });
+
+                Route::prefix('transactions')
+                    ->group(function () {
+                        Route::get('list', 'TransactionController@index');
+                        Route::post('store', 'TransactionController@store');
+                    });
 
                 Route::prefix('nft')
                     ->group(function () {
-
-                        Route::get('profile', 'NftController@profile');
-                        Route::post('update', 'NftController@update');
-
-                        Route::prefix('gameHistory')
-                            ->group(function () {
-                                Route::get('list', 'GameHistoryController@index');
-                                Route::post('store', 'GameHistoryController@store');
-                            });
-
-                        // Route::prefix('financialHistory')
-                        //     ->group(function () {
-                        //         Route::post('list', 'GameController@listGameHistory');
-                        //         Route::post('store', 'GameController@storeGameHistory');
-                        //     });
+                        Route::get('show', 'NftController@show');
+                        Route::post('store', 'NftController@store');
                     });
             });
     });

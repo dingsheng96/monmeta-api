@@ -3,8 +3,8 @@
 namespace App\Support\Services;
 
 use App\Models\User;
-use App\Models\Country;
 use App\Support\Services\BaseService;
+use Illuminate\Auth\AuthenticationException;
 
 class UserService extends BaseService
 {
@@ -15,18 +15,15 @@ class UserService extends BaseService
 
     public function checkUser()
     {
-        $this->model->wallet_id = $this->request->get('walletId');
+        if (!$this->model->exists) {
 
-        if ($this->model->isDirty()) {
-            $this->model->save();
+            $user = $this->getUserDetailsFromOtherPlatform();
+
+            throw_if(!$user, new AuthenticationException('User does not exists. Please register!'));
         }
 
-        if (!$this->model->wasRecentlyCreated) {
-            foreach ($this->model->tokens as $token) {
-                $token->revoke();
-            }
-        } else {
-            $this->getUserDetailsFromOtherPlatform();
+        foreach ($this->model->tokens as $token) {
+            $token->revoke();
         }
 
         return $this;
@@ -34,12 +31,13 @@ class UserService extends BaseService
 
     public function storeUserDetails()
     {
+        $this->model->wallet_id = $this->request->get('walletId');
         $this->model->username = $this->request->get('userName');
         $this->model->first_name = $this->request->get('firstName');
         $this->model->last_name = $this->request->get('lastName');
         $this->model->email = $this->request->get('email');
         $this->model->contact_no = $this->request->get('contactNo');
-        $this->model->nationality = $this->request->get('nationality');
+        $this->model->nationality_id = $this->request->get('nationality');
         $this->model->personal_id_type = $this->request->get('personalIdType');
         $this->model->personal_id_no = $this->request->get('personalIdNo');
 
@@ -52,6 +50,6 @@ class UserService extends BaseService
 
     public function getUserDetailsFromOtherPlatform()
     {
-        return $this;
+        return false;
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Database\Seeders\TierSeeder;
 use Database\Seeders\CountrySeeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            CountrySeeder::class
+            CountrySeeder::class,
+            TierSeeder::class
         ]);
 
         if (!app()->isProduction() && $this->command->confirm('Do you want to create demo data', false)) {

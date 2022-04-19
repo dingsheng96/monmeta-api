@@ -16,8 +16,7 @@ class CreateNftStarsTable extends Migration
         Schema::create('nft_stars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('nft_id')
-                ->constrained()
-                ->cascadeOnDelete();
+                ->constrained();
             $table->unsignedInteger('quantity')->default(0);
             $table->timestamps();
             $table->softDeletes();

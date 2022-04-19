@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Nft;
+namespace App\Http\Requests\Api\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileRequest extends FormRequest
+class StoreTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'nftId' => [
+            'transactionHash' => [
+                'required', 'string'
+            ],
+            'type' => [
                 'required'
             ]
         ];

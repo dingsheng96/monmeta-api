@@ -17,9 +17,8 @@ class AddColumnsInUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('nationality_id')
                 ->nullable()
-                ->constrained(app(Country::class)->getTable())
                 ->after('contact_no')
-                ->cascadeOnDelete();
+                ->constrained(app(Country::class)->getTable());
         });
     }
 

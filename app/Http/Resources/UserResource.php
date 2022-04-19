@@ -14,7 +14,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'walletId' => $this->wallet_id,
             'userName' => $this->username,
             'firstName' => $this->first_name,
@@ -25,5 +25,16 @@ class UserResource extends JsonResource
             'personalIdType' => $this->personal_id_type,
             'personalIdNo' => $this->personal_id_no
         ];
+
+        if ($this->relationLoaded('transactions')) {
+
+            $data += [
+                'totalPrizes' => strval($this->total_prizes),
+                'totalBuyIn' => strval($this->total_buy_in),
+                'profitLoss' => strval($this->profit_loss)
+            ];
+        }
+
+        return $data;
     }
 }
