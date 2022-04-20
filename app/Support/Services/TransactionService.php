@@ -28,16 +28,15 @@ class TransactionService extends BaseService
 
             $user = User::find($this->request->user()->id);
 
-            $valueDetails = (new Price())->getPriceInCentsWithDecimalsCount($transaction['value']);
-
             return $this->model->create([
                 'sourceable_type' => get_class($user),
                 'sourceable_id' => $user->id,
                 'type' => $this->request->get('type'),
                 'hash_id' => $transaction['hash'],
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
-                'amount' => $valueDetails['value_in_cents'],
-                'decimals' => $valueDetails['decimals_count'],
+                'amount' => $transaction['value'],
+                'decimals' => 18, // ERC20
+                'currency' => 'BNB',
                 'transaction_date' => $transaction['block_timestamp'],
             ]);
         }
