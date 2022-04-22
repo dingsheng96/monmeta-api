@@ -29,6 +29,9 @@ class StoreTransactionRequest extends FormRequest
             ],
             'type' => [
                 'required'
+            ],
+            'gameSeasonId' => [
+                'nullable', 'string'
             ]
         ];
     }

@@ -32,6 +32,7 @@ class TransactionService extends BaseService
                 'sourceable_type' => get_class($user),
                 'sourceable_id' => $user->id,
                 'type' => $this->request->get('type'),
+                'game_season_id' => $this->request->get('gameSeasonId'),
                 'hash_id' => $transaction['hash'],
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
                 'amount' => $transaction['value'],

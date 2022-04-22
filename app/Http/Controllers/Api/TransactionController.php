@@ -24,6 +24,7 @@ class TransactionController extends Controller
             ->with('sourceable')
             ->when(!empty($request->get('fromDate')), fn ($query) => $query->whereDate('transaction_date', '>=', $request->get('fromDate')))
             ->when(!empty($request->get('toDate')), fn ($query) => $query->whereDate('transaction_date', '<=', $request->get('toDate')))
+            ->when(!empty($request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $request->get('gameSeasonId')))
             ->whereHasMorph('sourceable', [User::class], fn ($query) => $query->where('wallet_id', $request->user()->wallet_id))
             ->orderByDesc('transaction_date')
             ->paginate($request->get('count'), ['*'], 'page', $request->get('page'))

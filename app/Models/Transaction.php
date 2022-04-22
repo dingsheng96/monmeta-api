@@ -18,7 +18,7 @@ class Transaction extends Model
     protected $fillable = [
         'hash_id', 'sourceable_type', 'sourceable_id',
         'type', 'status', 'amount', 'decimals', 'description',
-        'transaction_date', 'currency'
+        'transaction_date', 'currency', 'game_season_id'
     ];
 
     const TYPE_PURCHASE_TICKET = 'purchase_ticket';
