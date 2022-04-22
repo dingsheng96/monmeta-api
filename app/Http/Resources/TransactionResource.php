@@ -17,6 +17,7 @@ class TransactionResource extends JsonResource
         return [
             'transactionHash' => $this->hash_id,
             'status' => $this->status,
+            'gameSeasonId' => $this->game_season_id,
             'amount' => $this->formatted_amount,
             'currency' => $this->currency,
             'description' => $this->description,
