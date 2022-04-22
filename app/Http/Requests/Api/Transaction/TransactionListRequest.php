@@ -37,6 +37,9 @@ class TransactionListRequest extends FormRequest
             'toDate' => [
                 'nullable', 'date'
             ],
+            'gameSeasonId' => [
+                'nullable'
+            ]
         ];
     }
 }
