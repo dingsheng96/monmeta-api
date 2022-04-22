@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api;
 use App\Models\User;
 use App\Models\Country;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use App\Rules\ValidatePersonalIdTypeFormat;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +27,7 @@ class RegisterNewUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'walletId' => [
                 'required', 'string'
             ],
@@ -53,12 +52,21 @@ class RegisterNewUserRequest extends FormRequest
                 'required', 'string', 'exists:' . Country::class . ',code'
             ],
             'personalIdType' => [
-                'required', 'string', Rule::in(explode(',', Country::where('code', $this->get('nationality'))->value('personal_id_type')))
+                'required',
+                'string',
+                Rule::in(explode(',', Country::where('code', $this->get('nationality'))->value('personal_id_type')))
             ],
             'personalIdNo' => [
-                'required', 'string', new ValidatePersonalIdTypeFormat($this->get('personalIdType'))
+                'required',
+                'string',
             ]
         ];
+
+        if (!empty($this->get('personalIdType'))) {
+            $rules['personalIdNo'] = array_merge($rules['personalIdNo'], [new ValidatePersonalIdTypeFormat($this->get('personalIdType'))]);
+        }
+
+        return $rules;
     }
 
     /**

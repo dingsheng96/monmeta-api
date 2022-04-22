@@ -14,7 +14,7 @@ class ValidatePersonalIdTypeFormat implements Rule
      *
      * @return void
      */
-    public function __construct(string $personal_id_type)
+    public function __construct(?string $personal_id_type = null)
     {
         $this->personal_id_type = $personal_id_type;
     }
