@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use ReflectionClass;
 use App\Helpers\Price;
 use App\Observers\TransactionObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,22 @@ class Transaction extends Model
         parent::boot();
 
         self::observe(TransactionObserver::class);
+    }
+
+    public function getTransactionType(): array
+    {
+        $constants = (new ReflectionClass($this))->getConstants();
+
+        $data = [];
+
+        foreach ($constants as $var => $value) {
+
+            if (str_contains($var, 'TYPE_')) {
+                $data[] = $value;
+            }
+        }
+
+        return $data;
     }
 
     // relations

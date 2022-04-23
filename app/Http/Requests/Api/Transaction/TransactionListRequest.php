@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Api\Transaction;
 
-use App\Models\Nft;
-use App\Models\User;
 use App\Helpers\Status;
+use App\Models\Transaction;
 use Illuminate\Validation\Rule;
 use App\Traits\FormRequest\HasPagination;
 use Illuminate\Foundation\Http\FormRequest;
@@ -38,7 +37,22 @@ class TransactionListRequest extends FormRequest
                 'nullable', 'date'
             ],
             'gameSeasonId' => [
-                'nullable'
+                'nullable', 'string',
+                Rule::exists(Transaction::class, 'game_season_id')
+                    ->whereNull('deleted_at')
+            ],
+            'transactionHash' => [
+                'nullable', 'string',
+                Rule::exists(Transaction::class, 'hash_id')
+                    ->whereNull('deleted_at')
+            ],
+            'transactionType' => [
+                'nullable', 'string',
+                Rule::in((new Transaction())->getTransactionType())
+            ],
+            'status' => [
+                'nullable', 'string',
+                Rule::in((new Status())->getTransactionStatus())
             ]
         ];
     }
