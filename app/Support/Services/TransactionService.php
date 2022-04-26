@@ -42,6 +42,6 @@ class TransactionService extends BaseService
             ]);
         }
 
-        return false;
+        return $this;
     }
 }

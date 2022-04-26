@@ -27,9 +27,6 @@ class StoreNftDetailsRequest extends FormRequest
             'nftId' => [
                 'required', 'string'
             ],
-            'isTransferredOut' => [
-                'required', 'boolean',
-            ],
             'stars' => [
                 'nullable', 'numeric', 'min:1'
             ],

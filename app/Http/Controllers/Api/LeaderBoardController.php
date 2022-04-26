@@ -24,7 +24,7 @@ class LeaderBoardController extends Controller
             ->groupBy('nft_id')
             ->orderByDesc('winning_rate')
             ->orderByDesc('total_durations')
-            ->paginate($request->get('count'), ['*'], 'page', $request->get('page'))
+            ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))
             ->withQueryString();
 
         return ApiResponse::withLog(new GameHistory(), null, 'Leaderboard')

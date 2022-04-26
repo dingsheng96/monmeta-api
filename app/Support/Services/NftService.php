@@ -3,15 +3,10 @@
 namespace App\Support\Services;
 
 use App\Models\Nft;
-use App\Models\Game;
 use App\Models\Tier;
-use App\Models\User;
-use App\Helpers\Price;
 use App\Helpers\Status;
 use App\Models\NftTier;
 use App\Helpers\Moralis;
-use App\Models\GameHistory;
-use App\Models\Transaction;
 use App\Support\Services\BaseService;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,7 +21,7 @@ class NftService extends BaseService
     {
         $this->model->user_id = $this->request->user()->id;
         $this->model->token_id = $this->request->get('nftId');
-        $this->model->status = (bool) !$this->request->get('isTransferredOut') ? Status::STATUS_ACTIVE : Status::STATUS_INACTIVE;
+        $this->model->status = Status::STATUS_ACTIVE;
 
         if ($this->model->isDirty()) {
             $this->model->save();
@@ -39,7 +34,7 @@ class NftService extends BaseService
 
     public function storeStars()
     {
-        if ($this->request->has('stars') && !empty($this->request->get('stars'))) {
+        if (($this->request->has('stars') && !empty($this->request->get('stars')))) {
 
             $maxTier = Tier::select('stars_required')
                 ->orderByDesc('stars_required')
@@ -94,5 +89,52 @@ class NftService extends BaseService
         }
 
         return $this;
+    }
+
+    public function updateTransferredOutNft(string $status = Status::STATUS_ACTIVE)
+    {
+        $this->model->status = $status;
+
+        if ($this->model->isDirty('status')) {
+            $this->model->save();
+        }
+
+        return $this;
+    }
+
+    public function checkUserOwnedNft()
+    {
+        $ownedNftTokens = (new Moralis())->getUserNftTokenAddress($this->request->user()->wallet_id);
+
+        $unownedNftTokens = Nft::query()
+            ->where('user_id', $this->request->user()->id)
+            ->whereNotIn('token_id', $ownedNftTokens)
+            ->active()
+            ->get();
+
+        foreach ($unownedNftTokens as $nft) {
+            (new self())->setModel($nft)
+                ->updateTransferredOutNft(Status::STATUS_INACTIVE);
+        }
+
+        return $this;
+    }
+
+    public function getNftList()
+    {
+        return Nft::query()
+            ->with(['currentTier', 'gameHistories', 'user.transactions'])
+            ->withCount('gameHistories')
+            ->withMax('gameHistories', 'points')
+            ->withMin('gameHistories', 'points')
+            ->withAvg('gameHistories', 'points')
+            ->withSum('gameHistories', 'points')
+            ->withSum('gameHistories', 'duration')
+            ->withSum('stars', 'quantity')
+            ->active()
+            ->where('user_id', $this->request->user()->id)
+            ->when(!empty($this->request->get('nftId')), fn ($query) => $query->where('token_id', $this->request->get('nftId')))
+            ->paginate($this->request->get('itemsCount'), ['*'], 'page', $this->request->get('page'))
+            ->withQueryString();
     }
 }

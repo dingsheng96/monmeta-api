@@ -63,6 +63,17 @@ class Nft extends Model
             ]);
     }
 
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('status', Status::STATUS_ACTIVE);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', Status::STATUS_INACTIVE);
+    }
+
     // attributes
     public function getCurrentStarsAttribute()
     {

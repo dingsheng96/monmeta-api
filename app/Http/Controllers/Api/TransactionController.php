@@ -28,7 +28,7 @@ class TransactionController extends Controller
             ->when(!empty($request->get('toDate')), fn ($query) => $query->whereDate('transaction_date', '<=', $request->get('toDate')))
             ->whereHasMorph('sourceable', [User::class], fn ($query) => $query->where('wallet_id', $request->user()->wallet_id))
             ->orderByDesc('transaction_date')
-            ->paginate($request->get('count'), ['*'], 'page', $request->get('page'))
+            ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))
             ->withQueryString();
 
         return ApiResponse::withLog(new Transaction(), null, 'Transactions')
@@ -45,12 +45,6 @@ class TransactionController extends Controller
             $transaction = $transactionService
                 ->setRequest($request)
                 ->store();
-
-            if (!$transaction) {
-                return ApiResponse::setOkStatusCode()
-                    ->setMessage('Invalid transaction hash!')
-                    ->toFailJson();
-            }
 
             return ApiResponse::withLog($transaction, $request->user(), 'Transaction', 'create')
                 ->setOkStatusCode()

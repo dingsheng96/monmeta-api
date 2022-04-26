@@ -28,7 +28,7 @@ class GameHistoryController extends Controller
                 $query->whereHas('nft', fn ($query) => $query->where('token_id', $request->get('nftId')));
             })
             ->orderByDesc('ended_at')
-            ->paginate($request->get('count'), ['*'], 'page', $request->get('page'))
+            ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))
             ->withQueryString();
 
         return ApiResponse::withLog(new GameHistory(), null, 'Game histories')

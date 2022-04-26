@@ -9,32 +9,23 @@ use App\Http\Resources\NftResource;
 use App\Http\Controllers\Controller;
 use App\Support\Facades\ApiResponse;
 use App\Support\Services\NftService;
+use App\Http\Resources\PaginationResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Api\Nft\ShowNftDetailsRequest;
 use App\Http\Requests\Api\Nft\StoreNftDetailsRequest;
 
 class NftController extends Controller
 {
-    public function show(ShowNftDetailsRequest $request)
+    public function show(ShowNftDetailsRequest $request, NftService $nftService)
     {
-        $nft = Nft::query()
-            ->with(['currentTier', 'gameHistories', 'user.transactions'])
-            ->withCount('gameHistories')
-            ->withMax('gameHistories', 'points')
-            ->withMin('gameHistories', 'points')
-            ->withAvg('gameHistories', 'points')
-            ->withSum('gameHistories', 'points')
-            ->withSum('gameHistories', 'duration')
-            ->withSum('stars', 'quantity')
-            ->where('token_id', $request->get('nftId'))
-            ->where('user_id', $request->user()->id)
-            ->first();
+        $nft = $nftService->setRequest($request)
+            ->checkUserOwnedNft()
+            ->getNftList();
 
-        abort_if(!$nft, Response::HTTP_OK, 'No nft was found!');
-
-        return ApiResponse::withLog($nft, $request->user(), 'Nft details')
+        return ApiResponse::withLog(new Nft, $request->user(), 'NFT list')
             ->setOkStatusCode()
-            ->setData((new NftResource($nft))->toArray($request))
+            ->setData(NftResource::collection($nft)->toArray($request))
+            ->setPagination((new PaginationResource($nft))->toArray($request))
             ->toSuccessJson();
     }
 

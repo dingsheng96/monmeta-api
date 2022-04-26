@@ -5,10 +5,13 @@ namespace App\Http\Requests\Api\Nft;
 use App\Models\Nft;
 use App\Models\GameHistory;
 use Illuminate\Validation\Rule;
+use App\Traits\FormRequest\HasPagination;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShowNftDetailsRequest extends FormRequest
 {
+    use HasPagination;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,9 +29,9 @@ class ShowNftDetailsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        return $this->paginationRule() + [
             'nftId' => [
-                'required', 'string',
+                'nullable', 'string',
                 Rule::exists(Nft::class, 'token_id')
                     ->where('user_id', $this->user()->id)
                     ->whereNull('deleted_at')

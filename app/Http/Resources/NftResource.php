@@ -22,7 +22,7 @@ class NftResource extends JsonResource
 
         if ($this->relationLoaded('currentTier')) {
             $data += [
-                'tier' => $this->currentTier->first()->name,
+                'tier' => optional($this->currentTier->first())->name,
                 'stars' => strval($this->current_stars_with_tier_stars)
             ];
         }
