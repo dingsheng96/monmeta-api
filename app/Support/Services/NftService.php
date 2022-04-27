@@ -104,7 +104,7 @@ class NftService extends BaseService
 
     public function checkUserOwnedNft()
     {
-        $ownedNftTokens = (new Moralis())->getUserNftTokenAddress($this->request->user()->wallet_id);
+        $ownedNftTokens = (new Moralis())->getUserNftTokenUniqueId($this->request->user()->wallet_id);
 
         $unownedNftTokens = Nft::query()
             ->where('user_id', $this->request->user()->id)

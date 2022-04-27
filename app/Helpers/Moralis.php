@@ -45,7 +45,7 @@ class Moralis
         throw new \Exception($response->body(), Response::HTTP_OK);
     }
 
-    public function getUserNftTokenAddress(string $walletId): array
+    public function getUserNftTokenUniqueId(string $walletId): array
     {
         $meta = [
             'endpoint' => str_replace("{ADDRESS_ID}", $walletId, env('MORALIS_USER_NFT_URL')),
@@ -72,7 +72,7 @@ class Moralis
                 $result = $response->json();
 
                 foreach ($result['result'] as $data) {
-                    $tokens[] = $data['token_address'];
+                    $tokens[] = $data['name'] . $data['token_id'];
                 }
 
                 $cursor = $meta['params']['cursor'] = $result['cursor'];
