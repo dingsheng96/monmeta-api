@@ -76,9 +76,8 @@ class RegisterNewUserRequest extends FormRequest
      */
     protected function passedValidation()
     {
-        $this->request->set(
-            'nationality',
-            Country::where('code', $this->get('nationality'))->value('id')
-        );
+        $this->merge([
+            'nationality_id' => Country::where('code', $this->get('nationality'))->value('id')
+        ]);
     }
 }

@@ -37,7 +37,7 @@ class UserService extends BaseService
         $this->model->last_name = $this->request->get('lastName');
         $this->model->email = $this->request->get('email');
         $this->model->contact_no = $this->request->get('contactNo');
-        $this->model->nationality_id = $this->request->get('nationality');
+        $this->model->nationality_id = $this->request->get('nationality_id');
         $this->model->personal_id_type = $this->request->get('personalIdType');
         $this->model->personal_id_no = $this->request->get('personalIdNo');
 
