@@ -19,7 +19,7 @@ class CreateTransactionsTable extends Migration
             $table->morphs('sourceable');
             $table->string('type')->index();
             $table->string('status')->index();
-            $table->unsignedBigInteger('amount')->default(0)->nullable('in cents');
+            $table->unsignedBigInteger('amount')->default(0);
             $table->unsignedInteger('decimals')->default(0);
             $table->longText('description')->nullable();
             $table->timestamp('transaction_date')->nullable();

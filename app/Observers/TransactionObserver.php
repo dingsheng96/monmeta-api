@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Models\User;
 use App\Models\Transaction;
+use App\Support\Services\UserService;
 
 class TransactionObserver
 {
@@ -25,7 +27,12 @@ class TransactionObserver
      */
     public function created(Transaction $transaction)
     {
-        //
+        if ($transaction->sourceable_type === User::class) {
+            // update user wallet financial info
+            (new UserService())
+                ->setModel($transaction->sourceable)
+                ->updateUserFinancialInfo();
+        }
     }
 
     /**

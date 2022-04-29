@@ -52,4 +52,19 @@ class UserService extends BaseService
     {
         return false;
     }
+
+    public function updateUserFinancialInfo(string $currency = 'BNB', int $decimals = 18)
+    {
+        $this->model->total_purchase = $this->model->total_buy_in;
+        $this->model->total_prize_claim = $this->model->total_prizes;
+        $this->model->balance = $this->model->profit_loss;
+        $this->model->currency = $currency;
+        $this->model->decimals = $decimals;
+
+        if ($this->model->isDirty()) {
+            $this->model->save();
+        }
+
+        return $this;
+    }
 }

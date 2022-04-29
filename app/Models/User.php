@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Nft;
+use App\Helpers\Price;
 use App\Models\Country;
 use App\Models\GameHistory;
 use App\Models\Transaction;
@@ -24,7 +25,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'wallet_id', 'first_name', 'last_name', 'username',
-        'email', 'nationality_id', 'contact_no'
+        'email', 'nationality_id', 'contact_no',
+        'total_purchase', 'total_prize_claim', 'balance'
     ];
 
     /**
@@ -67,42 +69,56 @@ class User extends Authenticatable
     }
 
     // attributes
-    public function getTotalPrizesAttribute()
+    public function getTotalPrizesAttribute(): int
     {
-        $transactions = $this->transactions()
+        return (int) $this->transactions()
             ->where(function ($query) {
                 $query->prizeReward()
                     ->orWhere(fn ($query) => $query->bonusReward());
-            })->get();
-
-        $total = 0;
-
-        foreach ($transactions as $transaction) {
-            $total += $transaction->formatted_amount;
-        }
-
-        return $total;
+            })->sum('amount');
     }
 
-    public function getTotalBuyInAttribute()
+    public function getTotalBuyInAttribute(): int
     {
-        $transactions = $this->transactions()
+        return (int) $this->transactions()
             ->where(function ($query) {
                 $query->purchaseTicket()
                     ->orWhere(fn ($query) => $query->purchaseNft());
-            })->get();
-
-        $total = 0;
-
-        foreach ($transactions as $transaction) {
-            $total += $transaction->formatted_amount;
-        }
-
-        return $total;
+            })->sum('amount');
     }
 
-    public function getProfitLossAttribute()
+    public function getProfitLossAttribute(): int
     {
-        return $this->total_prizes - $this->total_buy_in;
+        return (int) $this->total_prizes - $this->total_buy_in;
+    }
+
+    public function getFormattedTotalPrizesAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->total_prizes, $this->decimals);
+    }
+
+    public function getFormattedTotalBuyInAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->total_buy_in, $this->decimals);
+    }
+
+    public function getFormattedProfitLossAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->profit_loss, $this->decimals);
+    }
+
+    public function getFormattedTotalPurchaseAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->total_purchase, $this->decimals);
+    }
+
+    public function getFormattedTotalPrizeClaimAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->total_prize_claim, $this->decimals);
+    }
+
+    public function getFormattedBalanceAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->balance, $this->decimals);
     }
 }

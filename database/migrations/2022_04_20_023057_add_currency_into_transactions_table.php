@@ -15,8 +15,7 @@ class AddCurrencyIntoTransactionsTable extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
 
-            $table->string('currency')
-                ->after('amount');
+            $table->string('currency')->after('amount');
         });
     }
 
