@@ -115,7 +115,7 @@ class Nft extends Model
             return 0;
         }
 
-        return (new DateTime())->convertFromMillisecondsToReadable($this->game_histories_sum_duration / 1000);
+        return (new DateTime())->convertFromMillisecondsToReadable($this->game_histories_sum_duration);
     }
 
     public function getWinningRateAttribute()

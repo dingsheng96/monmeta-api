@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Nft;
 use App\Helpers\DateTime;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class LeaderBoardResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'nft' => (new NftResource($this->nft))->toArray($request),
+            'nft' => (new NftResource(Nft::with('tiers')->where('id', $this->nft_id)->first()))->toArray($request),
             'totalPoints' => strval($this->total_game_points),
             'totalGameCounts' => strval($this->total_game_counts),
             'winningRate' => strval($this->winning_rate) . '%',

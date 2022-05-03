@@ -11,15 +11,15 @@ class DateTime
         $hrs = floor($seconds / 3600);
 
         if ($secs > 0 && $mins == 0 && $hrs == 0) { // only seconds
-            return $secs . ($secs > 1 ? 'seconds' : 'second');
+            return $secs . ($secs > 1 ? ' seconds' : ' second');
         }
 
         if ($secs >= 0 && $mins > 0 && $hrs == 0) { // only seconds and minutes
 
-            $time = $mins . ($mins > 1 ? 'minutes' : 'minute');
+            $time = $mins . ($mins > 1 ? ' minutes' : ' minute');
 
             if ($secs > 0) {
-                $time .= ' ' . str_pad($secs, 2, '0', STR_PAD_LEFT) . ($secs > 1 ? 'seconds' : 'second');
+                $time .= ' ' . str_pad($secs, 2, '0', STR_PAD_LEFT) . ($secs > 1 ? ' seconds' : ' second');
             }
 
             return $time;;
@@ -27,20 +27,20 @@ class DateTime
 
         if ($secs >= 0 && $mins >= 0 && $hrs > 0) { // seconds, minutes and hours
 
-            $time = $hrs . ($hrs > 1 ? 'hours' : 'hour');
+            $time = $hrs . ($hrs > 1 ? ' hours' : ' hour');
 
             if ($mins > 0) {
-                $time .= ' ' . str_pad($mins, 2, '0') . ($mins > 1 ? 'minutes' : 'minute');
+                $time .= ' ' . $mins . ($mins > 1 ? ' minutes' : ' minute');
             }
 
             if ($secs > 0) {
-                $time .= ' ' . str_pad($secs, 2, '0', STR_PAD_LEFT) . ($secs > 1 ? 'seconds' : 'second');
+                $time .= ' ' . str_pad($secs, 2, '0', STR_PAD_LEFT) . ($secs > 1 ? ' seconds' : ' second');
             }
 
             return $time;
         }
 
-        return '0second';
+        return '0 second';
     }
 
     public function convertFromMillisecondsToReadable(int $milliseconds)
