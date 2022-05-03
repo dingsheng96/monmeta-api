@@ -19,9 +19,6 @@ class LeaderBoardController extends Controller
     {
         $leaderBoard = DB::table(app(GameHistory::class)->getTable() . ' AS main')
             ->selectRaw('nft_id, COUNT(*) AS total_game_counts, SUM(points) AS total_game_points, SUM(duration) AS total_durations,ROUND(((SELECT COUNT(*) FROM ' . app(GameHistory::class)->getTable() . ' WHERE position = 1 AND nft_id = main.nft_id)/COUNT(*) * 100), 2) AS winning_rate')
-            // $leaderBoard = GameHistory::query()
-            //     ->with('nft.tiers')
-            //     ->selectRaw('nft_id, COUNT(*) AS total_game_counts, SUM(points) AS total_game_points, SUM(duration) AS total_durations,ROUND(((SUM(points)/COUNT(*)) * 100), 2) AS winning_rate')
             ->when(!empty($request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $request->get('gameSeasonId')))
             ->whereNull('deleted_at')
             ->groupBy('nft_id')
