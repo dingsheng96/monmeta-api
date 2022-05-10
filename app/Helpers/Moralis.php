@@ -45,7 +45,7 @@ class Moralis
         throw new \Exception($response->body(), Response::HTTP_OK);
     }
 
-    public function getUserNftTokenUniqueId(string $walletId): array
+    public function getUserNftTokenUniqueId(string $walletId)
     {
         $meta = [
             'endpoint' => str_replace("{ADDRESS_ID}", $walletId, env('MORALIS_USER_NFT_URL')),
@@ -64,19 +64,26 @@ class Moralis
                 ->withHeaders($meta['headers'])
                 ->get($meta['endpoint'], $meta['params']);
 
-            if ($response->successful() && !empty($response->json())) {
+            if ($response->successful()) {
+                if (!empty($response->json())) {
+                    $this->setProperties($response->json())
+                        ->saveApiLog('user NFT response', 'moralis');
+
+                    $result = $response->json();
+
+                    foreach ($result['result'] as $data) {
+                        $tokens[] = $data['name'] . $data['token_id'];
+                    }
+
+                    $cursor = $meta['params']['cursor'] = $result['cursor'];
+                }
+            } else {
 
                 $this->setProperties($response->json())
                     ->saveApiLog('user NFT response', 'moralis');
 
-                $result = $response->json();
+                throw new \Exception('Errors returned from Moralis!', Response::HTTP_INTERNAL_SERVER_ERROR);
 
-                foreach ($result['result'] as $data) {
-                    $tokens[] = $data['name'] . $data['token_id'];
-                }
-
-                $cursor = $meta['params']['cursor'] = $result['cursor'];
-            } else {
                 break;
             }
         } while (!empty($cursor));
