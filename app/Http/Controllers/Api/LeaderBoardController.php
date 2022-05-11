@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Nft;
-use App\Models\Tier;
 use App\Models\GameHistory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Support\Facades\ApiResponse;
@@ -18,10 +15,11 @@ class LeaderBoardController extends Controller
     public function index(LeaderBoardRequest $request)
     {
         $leaderBoard = DB::table(app(GameHistory::class)->getTable() . ' AS main')
-            ->selectRaw('nft_id, COUNT(*) AS total_game_counts, SUM(points) AS total_game_points, SUM(duration) AS total_durations,ROUND(((SELECT COUNT(*) FROM ' . app(GameHistory::class)->getTable() . ' WHERE position = 1 AND nft_id = main.nft_id)/COUNT(*) * 100), 2) AS winning_rate')
+            ->selectRaw('nft_id, MIN(duration) as best_lap, COUNT(*) AS total_game_counts, SUM(points) AS total_game_points, SUM(duration) AS total_durations,ROUND(((SELECT COUNT(*) FROM ' . app(GameHistory::class)->getTable() . ' WHERE position = 1 AND nft_id = main.nft_id)/COUNT(*) * 100), 2) AS winning_rate')
             ->when(!empty($request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $request->get('gameSeasonId')))
             ->whereNull('deleted_at')
             ->groupBy('nft_id')
+            ->orderBy('best_lap')
             ->orderByDesc('winning_rate')
             ->orderByDesc('total_durations')
             ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))

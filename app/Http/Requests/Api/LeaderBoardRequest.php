@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\GameHistory;
+use Illuminate\Validation\Rule;
 use App\Traits\FormRequest\HasPagination;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -33,7 +35,8 @@ class LeaderBoardRequest extends FormRequest
             ],
             'gameSeasonId' => [
                 'nullable', 'string',
-                'exists:' . GameHistory::class . ',game_season_id'
+                Rule::exists(GameHistory::class, 'game_season_id')
+                    ->whereNull('deleted_at')
             ]
         ];
     }
