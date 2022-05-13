@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Nft;
 use App\Traits\HasApiLog;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,7 @@ class Moralis
         throw new \Exception($response->body(), Response::HTTP_OK);
     }
 
-    public function getUserNftTokenUniqueId(string $walletId)
+    public function getUserNftList(string $walletId): array
     {
         $meta = [
             'endpoint' => str_replace("{ADDRESS_ID}", $walletId, env('MORALIS_USER_NFT_URL')),
@@ -53,7 +54,7 @@ class Moralis
             'params' => ['chain' => $this->chain, 'format' => 'decimal', 'limit' => 100, 'cursor' => ""]
         ];
 
-        $tokens = [];
+        $datas = [];
         $cursor = $meta['params']['cursor'];
 
         do {
@@ -72,7 +73,8 @@ class Moralis
                     $result = $response->json();
 
                     foreach ($result['result'] as $data) {
-                        $tokens[] = $data['name'] . $data['token_id'];
+                        $index = $data['name'] . $data['token_id'];
+                        $datas[$index] = $data;
                     }
 
                     $cursor = $meta['params']['cursor'] = $result['cursor'];
@@ -88,7 +90,41 @@ class Moralis
             }
         } while (!empty($cursor));
 
+        return $datas;
+    }
+
+    public function getUserNftTokenUniqueId(string $walletId)
+    {
+        $nftList = $this->getUserNftList($walletId); // datas
+
+        $tokens = [];
+
+        foreach ($nftList as $nft) {
+            $tokens[] = $nft['name'] . $nft['token_id'];
+        }
+
         return $tokens;
+    }
+
+    public function getUserNftDetails(string $walletId, string $nftId)
+    {
+        $nftList = $this->getUserNftList($walletId);
+
+        if (!array_key_exists($nftId, $nftList)) {
+            $nft = Nft::active()
+                ->where('token_id', $nftId)
+                ->whereHas('user', fn ($query) => $query->where('wallet_id', $walletId))
+                ->first();
+
+            if ($nft) {
+                $nft->status = Status::STATUS_INACTIVE;
+                $nft->save();
+            }
+
+            return;
+        }
+
+        return $nftList[$nftId];
     }
 
     public function withLog(Model $subject, Model $causer = null, string $moduleName, $action = 'list')

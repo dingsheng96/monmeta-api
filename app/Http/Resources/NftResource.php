@@ -18,6 +18,7 @@ class NftResource extends JsonResource
         $data = [
             'nftId' => $this->token_id,
             'status' => $this->status,
+            'image' => $this->image
         ];
 
         if ($this->relationLoaded('currentTier')) {

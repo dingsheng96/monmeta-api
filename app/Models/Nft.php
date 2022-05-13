@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Game;
 use App\Models\Tier;
 use App\Models\User;
 use App\Helpers\Status;
@@ -9,6 +10,7 @@ use App\Models\NftStar;
 use App\Models\NftTier;
 use App\Helpers\DateTime;
 use App\Models\GameHistory;
+use App\Observers\NftObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,8 +23,20 @@ class Nft extends Model
     protected $table = 'nfts';
 
     protected $fillable = [
-        'token_id', 'status'
+        'token_id', 'status', 'image', 'properties'
     ];
+
+    protected $casts = [
+        'properties' => 'array'
+    ];
+
+    // override
+    public static function boot()
+    {
+        parent::boot();
+
+        self::observe(NftObserver::class);
+    }
 
     // relations
     public function user()

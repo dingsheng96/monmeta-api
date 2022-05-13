@@ -58,6 +58,10 @@ class GameHistoryService extends BaseService
                 return $item->nft_id == $nft->id;
             });
 
+        if (!$ranking) {
+            return "N/A";
+        }
+
         $ranking += 1;
 
         switch (substr($ranking, -1)) {
