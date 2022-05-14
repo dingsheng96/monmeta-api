@@ -62,6 +62,8 @@ class Handler extends ExceptionHandler
             } elseif ($exception instanceof ValidationException) {
                 $response->setUnprocessableEntityStatusCode()
                     ->setError($exception->errors());
+
+                Log::error(json_encode($exception));
             } elseif ($exception instanceof HttpExceptionInterface) {
                 $response->setStatusCode($exception->getStatusCode());
             }

@@ -26,7 +26,11 @@ class GameHistoryService extends BaseService
         );
 
         $nft = Nft::firstOrCreate(
-            ['token_id' => $this->request->get('nftId')],
+            [
+                'user_id' => $this->request->user()->id,
+                'token_id' => $this->request->get('nftId'),
+                'status' => Status::STATUS_ACTIVE
+            ],
             [
                 'user_id' => $this->request->user()->id,
                 'token_id' => $this->request->get('nftId'),
@@ -40,9 +44,9 @@ class GameHistoryService extends BaseService
             'room_id' => $this->request->get('roomId'),
             'game_season_id' => $this->request->get('gameSeasonId'),
             'points' => $this->request->get('points'),
-            'position' => $this->request->get('position'),
             'started_at' => $this->request->get('startedAt'),
             'ended_at' => $this->request->get('endedAt'),
+            'position' => $this->request->get('position'),
         ]);
     }
 
@@ -64,24 +68,13 @@ class GameHistoryService extends BaseService
 
         $ranking += 1;
 
-        switch (substr($ranking, -1)) {
-            case '1':
-                $position = 'st';
-                break;
-            case '2':
-                $position = 'nd';
-            case '3':
-                $position = 'th';
-                if (strlen($ranking) == 1) {
-                    $position = 'rd';
-                }
-                break;
-            default:
-                $position = 'th';
-                break;
+        $ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
+
+        if (($ranking % 100) >= 11 && ($ranking % 100) <= 13) {
+            return $ranking . 'th';
         }
 
-        return $ranking . $position;
+        return $ranking . $ends[$ranking % 10];
     }
 
     public function getUserSeasonScore(Nft $nft): int

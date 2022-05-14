@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\GameHistory;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGameHistoryRequest extends FormRequest
@@ -25,10 +26,10 @@ class StoreGameHistoryRequest extends FormRequest
     {
         return [
             'gameId' => [
-                'required', 'string'
+                'required'
             ],
             'gameName' => [
-                'required', 'string',
+                'required'
             ],
             'points' => [
                 'required', 'integer'
@@ -38,6 +39,15 @@ class StoreGameHistoryRequest extends FormRequest
             ],
             'endedAt' => [
                 'required', 'date', 'after:startedAt'
+            ],
+            'roomId' => [
+                'required'
+            ],
+            'gameSeasonId' => [
+                'required'
+            ],
+            'position' => [
+                'required', 'integer'
             ]
         ];
     }
