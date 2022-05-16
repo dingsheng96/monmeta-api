@@ -35,10 +35,10 @@ class StoreGameHistoryRequest extends FormRequest
                 'required', 'integer'
             ],
             'startedAt' => [
-                'required', 'date', 'before:endedAt'
+                'required',
             ],
             'endedAt' => [
-                'required', 'date', 'after:startedAt'
+                'required',
             ],
             'roomId' => [
                 'required'
@@ -50,5 +50,15 @@ class StoreGameHistoryRequest extends FormRequest
                 'required', 'integer'
             ]
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        Log::info(json_encode($this->all()));
     }
 }

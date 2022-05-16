@@ -2,6 +2,7 @@
 
 namespace App\Support\Services;
 
+use Carbon\Carbon;
 use App\Models\Nft;
 use App\Models\Game;
 use App\Helpers\Status;
@@ -25,29 +26,34 @@ class GameHistoryService extends BaseService
             ]
         );
 
-        $nft = Nft::firstOrCreate(
-            [
-                'user_id' => $this->request->user()->id,
-                'token_id' => $this->request->get('nftId'),
-                'status' => Status::STATUS_ACTIVE
-            ],
-            [
-                'user_id' => $this->request->user()->id,
-                'token_id' => $this->request->get('nftId'),
-                'status' => Status::STATUS_ACTIVE
-            ]
-        );
+        $nft = $this->request->user()
+            ->nfts()
+            ->firstOrCreate(
+                [
+                    'token_id' => $this->request->get('nftId'),
+                    'status' => Status::STATUS_ACTIVE
+                ],
+                [
+                    'user_id' => $this->request->user()->id,
+                    'token_id' => $this->request->get('nftId'),
+                    'status' => Status::STATUS_ACTIVE
+                ]
+            );
 
-        return $this->model->create([
-            'game_id' => $game->id,
-            'nft_id' => $nft->id,
-            'room_id' => $this->request->get('roomId'),
-            'game_season_id' => $this->request->get('gameSeasonId'),
-            'points' => $this->request->get('points'),
-            'started_at' => $this->request->get('startedAt'),
-            'ended_at' => $this->request->get('endedAt'),
-            'position' => $this->request->get('position'),
-        ]);
+        if ($nft) {
+            return $this->model->create([
+                'game_id' => $game->id,
+                'nft_id' => $nft->id,
+                'room_id' => $this->request->get('roomId'),
+                'game_season_id' => $this->request->get('gameSeasonId'),
+                'points' => $this->request->get('points'),
+                'started_at' => Carbon::createFromTimestamp($this->request->get('startedAt'))->toDateTimeString(),
+                'ended_at' => Carbon::createFromTimestamp($this->request->get('endedAt'))->toDateTimeString(),
+                'position' => $this->request->get('position'),
+            ]);
+        }
+
+        throw new \Exception('Unable to create user\'s NFT and its respective record.');
     }
 
     public function getUserRanking(Nft $nft): string
