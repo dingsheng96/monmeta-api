@@ -33,7 +33,7 @@ class TransactionService extends BaseService
             $data = [
                 'user_id' => $user->id,
                 'type' => $this->request->get('type'),
-                'game_season_id' => $this->request->get('gameSeasonId'),
+                'game_season_id' => !empty($this->request->get('gameSeasonId')) ? $this->request->get('gameSeasonId') : null,
                 'hash_id' => $transaction['hash'],
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
                 'transaction_date' => $transaction['block_timestamp'],
