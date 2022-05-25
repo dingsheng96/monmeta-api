@@ -40,10 +40,10 @@ class StoreTransactionRequest extends FormRequest
                 'required_if:type,' . Transaction::TYPE_PURCHASE_NFT
             ],
             'mspcValue' => [
-                'required', 'integer'
+                'required',
             ],
             'usdtValue' => [
-                'required', 'integer'
+                'required',
             ],
             'chain' => [
                 'nullable', 'string'
