@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function transactions()
     {
-        return $this->morphMany(Transaction::class, 'sourceable');
+        return $this->hasMany(Transaction::class, 'user_id', 'id');
     }
 
     public function gameHistories()
@@ -69,56 +69,109 @@ class User extends Authenticatable
     }
 
     // attributes
-    public function getTotalPrizesAttribute(): int
+    public function getUsdtTotalPrizesAttribute(): int
     {
         return (int) $this->transactions()
             ->where(function ($query) {
                 $query->prizeReward()
                     ->orWhere(fn ($query) => $query->bonusReward());
-            })->sum('amount');
+            })->sum('usdt');
     }
 
-    public function getTotalBuyInAttribute(): int
+    public function getUsdtTotalBuyInAttribute(): int
     {
         return (int) $this->transactions()
             ->where(function ($query) {
                 $query->purchaseTicket()
                     ->orWhere(fn ($query) => $query->purchaseNft());
-            })->sum('amount');
+            })->sum('usdt');
     }
 
-    public function getProfitLossAttribute(): int
+    public function getUsdtProfitLossAttribute(): int
     {
-        return (int) $this->total_prizes - $this->total_buy_in;
+        return (int) $this->usdt_total_prizes - $this->usdt_total_buy_in;
     }
 
-    public function getFormattedTotalPrizesAttribute(): string
+    public function getFormattedUsdtTotalPrizesAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->total_prizes, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_total_prizes, $this->decimals);
     }
 
-    public function getFormattedTotalBuyInAttribute(): string
+    public function getFormattedUsdtTotalBuyInAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->total_buy_in, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_total_buy_in, $this->decimals);
     }
 
-    public function getFormattedProfitLossAttribute(): string
+    public function getFormattedUsdtProfitLossAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->profit_loss, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_profit_loss, $this->decimals);
     }
 
-    public function getFormattedTotalPurchaseAttribute(): string
+    public function getFormattedUsdtTotalPurchaseAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->total_purchase, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_total_purchase, $this->decimals);
     }
 
-    public function getFormattedTotalPrizeClaimAttribute(): string
+    public function getFormattedUsdtTotalPrizeClaimAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->total_prize_claim, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_total_prize_claim, $this->decimals);
     }
 
-    public function getFormattedBalanceAttribute(): string
+    public function getFormattedUsdtBalanceAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->balance, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt_balance, $this->decimals);
+    }
+
+    public function getMspcTotalPrizesAttribute(): int
+    {
+        return (int) $this->transactions()
+            ->where(function ($query) {
+                $query->prizeReward()
+                    ->orWhere(fn ($query) => $query->bonusReward());
+            })->sum('mspc');
+    }
+
+    public function getMspcTotalBuyInAttribute(): int
+    {
+        return (int) $this->transactions()
+            ->where(function ($query) {
+                $query->purchaseTicket()
+                    ->orWhere(fn ($query) => $query->purchaseNft());
+            })->sum('mspc');
+    }
+
+    public function getMspcProfitLossAttribute(): int
+    {
+        return (int) $this->mspc_total_prizes - $this->mspc_total_buy_in;
+    }
+
+    public function getFormattedMspcTotalPrizesAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_total_prizes, $this->decimals);
+    }
+
+    public function getFormattedMspcTotalBuyInAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_total_buy_in, $this->decimals);
+    }
+
+    public function getFormattedMspcProfitLossAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_profit_loss, $this->decimals);
+    }
+
+    public function getFormattedMspcTotalPurchaseAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_total_purchase, $this->decimals);
+    }
+
+    public function getFormattedMspcTotalPrizeClaimAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_total_prize_claim, $this->decimals);
+    }
+
+    public function getFormattedMspcBalanceAttribute(): string
+    {
+        return (new Price())->getPriceInDecimals($this->mspc_balance, $this->decimals);
     }
 }

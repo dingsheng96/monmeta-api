@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Transaction;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TransactionResource extends JsonResource
@@ -14,15 +15,21 @@ class TransactionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'transactionHash' => $this->hash_id,
             'status' => $this->status,
             'type' => $this->type,
             'gameSeasonId' => $this->game_season_id,
-            'amount' => $this->formatted_amount,
-            'currency' => $this->currency,
             'description' => $this->description,
             'transactionDate' => $this->transaction_date,
+            'usdtValue' => $this->formatted_usdt,
+            'mspcValue' => $this->formatted_mspc
         ];
+
+        if ($this->type == Transaction::TYPE_PURCHASE_NFT && !empty($this->nft_id)) {
+            $data = array_merge($data, (new NftResource($this->nft))->toArray($request));
+        }
+
+        return $data;
     }
 }

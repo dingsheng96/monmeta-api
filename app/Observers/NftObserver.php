@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Nft;
-use App\Helpers\Moralis;
+use App\Support\Services\NftService;
 
 class NftObserver
 {
@@ -15,7 +15,9 @@ class NftObserver
      */
     public function created(Nft $nft)
     {
-        //
+        (new NftService())->setModel($nft)
+            ->setRequest(request())
+            ->updateNftImage();
     }
 
     /**
@@ -26,14 +28,7 @@ class NftObserver
      */
     public function creating(Nft $nft)
     {
-        $nftDetail = (new Moralis())->getUserNftDetails(request()->user()->wallet_id, $nft->token_id);
-
-        if (!empty($nftDetail)) {
-            $metaData = json_decode($nftDetail['metadata']);
-
-            $nft->image = $metaData->image;
-            $nft->properties = $metaData;
-        }
+        //
     }
 
     /**

@@ -16,7 +16,7 @@ class AddFinancialInfoInUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
 
             $table->string('currency')->nullable()->after('personal_id_no');
-            $table->unsignedInteger('decimals')->default(0)->after('personal_id_no');
+            $table->unsignedInteger('decimals')->default(18)->after('personal_id_no');
             $table->bigInteger('balance')->default(0)->after('personal_id_no');
             $table->unsignedBigInteger('total_prize_claim')->default(0)->after('personal_id_no');
             $table->unsignedBigInteger('total_purchase')->default(0)->after('personal_id_no');

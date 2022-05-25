@@ -30,6 +30,9 @@ class StoreNftDetailsRequest extends FormRequest
             'stars' => [
                 'nullable', 'numeric', 'min:1'
             ],
+            'chain' => [
+                'nullable', 'string'
+            ]
         ];
     }
 }

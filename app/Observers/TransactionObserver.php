@@ -27,12 +27,9 @@ class TransactionObserver
      */
     public function created(Transaction $transaction)
     {
-        if ($transaction->sourceable_type === User::class) {
-            // update user wallet financial info
-            (new UserService())
-                ->setModel($transaction->sourceable)
-                ->updateUserFinancialInfo();
-        }
+        (new UserService())
+            ->setModel($transaction->user)
+            ->updateUserFinancialInfo();
     }
 
     /**

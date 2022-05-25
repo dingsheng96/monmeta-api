@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Transaction;
 
+use App\Models\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTransactionRequest extends FormRequest
@@ -28,9 +29,23 @@ class StoreTransactionRequest extends FormRequest
                 'required', 'string'
             ],
             'type' => [
-                'required'
+                'required', 'string'
             ],
             'gameSeasonId' => [
+                'nullable', 'string',
+                'required_if:type,' . Transaction::TYPE_PURCHASE_TICKET
+            ],
+            'nftId' => [
+                'nullable', 'string',
+                'required_if:type,' . Transaction::TYPE_PURCHASE_NFT
+            ],
+            'mspcValue' => [
+                'required', 'integer'
+            ],
+            'usdtValue' => [
+                'required', 'integer'
+            ],
+            'chain' => [
                 'nullable', 'string'
             ]
         ];

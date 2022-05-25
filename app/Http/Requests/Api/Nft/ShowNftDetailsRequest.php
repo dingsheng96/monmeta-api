@@ -40,6 +40,9 @@ class ShowNftDetailsRequest extends FormRequest
                 'nullable', 'string',
                 Rule::exists(GameHistory::class, 'game_season_id')
                     ->whereNull('deleted_at')
+            ],
+            'chain' => [
+                'nullable', 'string'
             ]
         ];
     }

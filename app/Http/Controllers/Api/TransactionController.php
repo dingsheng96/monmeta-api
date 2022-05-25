@@ -19,14 +19,14 @@ class TransactionController extends Controller
     public function index(TransactionListRequest $request)
     {
         $transactions = Transaction::query()
-            ->with('sourceable')
+            ->with(['user', 'nft'])
             ->when(!empty($request->get('transactionHash')), fn ($query) => $query->where('hash_id', $request->get('transactionHash')))
             ->when(!empty($request->get('transactionType')), fn ($query) => $query->where('type', $request->get('transactionType')))
             ->when(!empty($request->get('status')), fn ($query) => $query->where('status', $request->get('status')))
             ->when(!empty($request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $request->get('gameSeasonId')))
             ->when(!empty($request->get('fromDate')), fn ($query) => $query->whereDate('transaction_date', '>=', $request->get('fromDate')))
             ->when(!empty($request->get('toDate')), fn ($query) => $query->whereDate('transaction_date', '<=', $request->get('toDate')))
-            ->whereHasMorph('sourceable', [User::class], fn ($query) => $query->where('wallet_id', $request->user()->wallet_id))
+            ->whereHas('user', fn ($query) => $query->where('wallet_id', $request->user()->wallet_id))
             ->orderByDesc('transaction_date')
             ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))
             ->withQueryString();

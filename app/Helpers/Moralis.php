@@ -20,6 +20,15 @@ class Moralis
         $this->moralisApiKey = env('MORALIS_API_KEY');
     }
 
+    public function setChain(string $chain = null)
+    {
+        if (!empty($chain)) {
+            $this->chain = $chain;
+        }
+
+        return $this;
+    }
+
     public function getTransaction(string $hash)
     {
         $meta = [

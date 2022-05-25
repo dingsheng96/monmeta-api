@@ -19,9 +19,9 @@ class LeaderBoardController extends Controller
             ->when(!empty($request->get('gameSeasonId')), fn ($query) => $query->where('game_season_id', $request->get('gameSeasonId')))
             ->whereNull('deleted_at')
             ->groupBy('nft_id')
-            ->orderBy('best_lap')
+            ->orderByDesc('total_game_points')
+            ->orderBy('total_durations')
             ->orderByDesc('winning_rate')
-            ->orderByDesc('total_durations')
             ->paginate($request->get('itemsCount'), ['*'], 'page', $request->get('page'))
             ->withQueryString();
 

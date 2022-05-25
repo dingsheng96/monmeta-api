@@ -22,24 +22,45 @@ class TransactionService extends BaseService
 
     public function store()
     {
-        $transaction = (new Moralis())->getTransaction($this->request->get('transactionHash'));
+        $transaction = (new Moralis())
+            ->setChain($this->request->get('chain'))
+            ->getTransaction($this->request->get('transactionHash'));
 
         if ($transaction) {
 
             $user = User::find($this->request->user()->id);
 
-            return $this->model->create([
-                'sourceable_type' => get_class($user),
-                'sourceable_id' => $user->id,
+            $data = [
+                'user_id' => $user->id,
                 'type' => $this->request->get('type'),
                 'game_season_id' => $this->request->get('gameSeasonId'),
                 'hash_id' => $transaction['hash'],
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
-                'amount' => $transaction['value'],
-                'decimals' => 18, // ERC20
-                'currency' => 'BNB',
                 'transaction_date' => $transaction['block_timestamp'],
-            ]);
+                'decimals' => 18, // ERC20
+                'usdt' => $this->request->get('usdt_value', 0),
+                'mspc' => $this->request->get('mspc_value', 0),
+            ];
+
+            if (!empty($this->request->get('nftId'))) {
+
+                $userNft = Nft::active()
+                    ->where('user_id', $this->request->user()->id)
+                    ->where('token_id', $this->request->get('nftId'))
+                    ->firstOr(function () {
+                        return new Nft();
+                    });
+
+                $nft = (new NftService())
+                    ->setRequest($this->request)
+                    ->setModel($userNft)
+                    ->store()
+                    ->getModel();
+
+                $data = array_merge($data, ['nft_id' => $nft->id]);
+            }
+
+            return $this->model->create($data);
         }
 
         return $this;

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Nft;
+use App\Models\User;
 use ReflectionClass;
 use App\Helpers\Price;
 use App\Observers\TransactionObserver;
@@ -17,9 +19,9 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
-        'hash_id', 'sourceable_type', 'sourceable_id',
-        'type', 'status', 'amount', 'decimals', 'description',
-        'transaction_date', 'currency', 'game_season_id'
+        'hash_id', 'user_id', 'type', 'game_season_id', 'nft_id',
+        'status', 'description', 'transaction_date', 'decimals',
+        'usdt', 'mspc'
     ];
 
     const TYPE_PURCHASE_TICKET = 'purchase_ticket';
@@ -56,9 +58,14 @@ class Transaction extends Model
     }
 
     // relations
-    public function sourceable()
+    public function user()
     {
-        return $this->morphTo();
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function nft()
+    {
+        return $this->belongsTo(Nft::class, 'nft_id', 'id');
     }
 
     // scopes
@@ -83,8 +90,13 @@ class Transaction extends Model
     }
 
     // attributes
-    public function getFormattedAmountAttribute()
+    public function getFormattedUsdtAttribute()
     {
-        return (new Price())->getPriceInDecimals($this->amount, $this->decimals);
+        return (new Price())->getPriceInDecimals($this->usdt, $this->decimals);
+    }
+
+    public function getFormattedMspcAttribute()
+    {
+        return (new Price())->getPriceInDecimals($this->mspc, $this->decimals);
     }
 }

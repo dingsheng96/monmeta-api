@@ -29,9 +29,16 @@ class UserResource extends JsonResource
         if ($this->relationLoaded('transactions')) {
 
             $data += [
-                'totalPrizes' => strval($this->formatted_total_prizes),
-                'totalBuyIn' => strval($this->formatted_total_buy_in),
-                'profitLoss' => strval($this->formatted_profit_loss)
+                'usdt' => [
+                    'totalPrizes' => strval($this->formatted_usdt_total_prizes),
+                    'totalBuyIn' => strval($this->formatted_usdt_total_buy_in),
+                    'profitLoss' => strval($this->formatted_usdt_profit_loss)
+                ],
+                'mspc' => [
+                    'totalPrizes' => strval($this->formatted_mspc_total_prizes),
+                    'totalBuyIn' => strval($this->formatted_mspc_total_buy_in),
+                    'profitLoss' => strval($this->formatted_mspc_profit_loss)
+                ]
             ];
         }
 

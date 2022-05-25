@@ -117,6 +117,18 @@ class NftService extends BaseService
                 ->updateTransferredOutNft(Status::STATUS_INACTIVE);
         }
 
+        $user = $this->request->user();
+
+        Nft::active()
+            ->where('user_id', $user->id)
+            ->whereNull('image')
+            ->get()
+            ->each(function ($nft) {
+                (new self())->setModel($nft)
+                    ->setRequest($this->request)
+                    ->updateNftImage();
+            });
+
         return $this;
     }
 
@@ -136,5 +148,24 @@ class NftService extends BaseService
             ->when(!empty($this->request->get('nftId')), fn ($query) => $query->where('token_id', $this->request->get('nftId')))
             ->paginate($this->request->get('itemsCount'), ['*'], 'page', $this->request->get('page'))
             ->withQueryString();
+    }
+
+    public function updateNftImage()
+    {
+        $nftDetail = (new Moralis())
+            ->setChain($this->request->get('chain'))
+            ->getUserNftDetails($this->request->user()->wallet_id, $this->model->token_id);
+
+        if (!empty($nftDetail)) {
+            $metaData = json_decode($nftDetail['metadata']);
+
+            $this->model->image = $metaData->image;
+            $this->model->properties = $metaData;
+            if ($this->model->isDirty()) {
+                $this->model->save();
+            }
+        }
+
+        return $this;
     }
 }

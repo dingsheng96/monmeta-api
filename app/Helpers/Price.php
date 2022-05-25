@@ -15,6 +15,6 @@ class Price
 
     public function getPriceInDecimals(int $value, int $decimals_count = 0): string
     {
-        return ($value / str_pad('1', $decimals_count + 1, '0', STR_PAD_RIGHT));
+        return number_format(($value / str_pad('1', $decimals_count + 1, '0', STR_PAD_RIGHT)), $decimals_count, '.', '');
     }
 }

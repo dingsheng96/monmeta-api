@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Nft;
+use App\Helpers\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\NftResource;
@@ -32,10 +33,16 @@ class NftController extends Controller
     public function store(StoreNftDetailsRequest $request, NftService $nftService)
     {
         return DB::transaction(function () use ($request, $nftService) {
-
             $nft = $nftService
                 ->setRequest($request)
-                ->setModel(Nft::firstOrNew(['token_id' => $request->get('nftId')]))
+                ->setModel(
+                    $request->user()->nfts()
+                        ->where('token_id', $request->get('nftId'))
+                        ->where('status', Status::STATUS_ACTIVE)
+                        ->firstOr(function () {
+                            return new Nft();
+                        })
+                )
                 ->store()
                 ->getModel();
 

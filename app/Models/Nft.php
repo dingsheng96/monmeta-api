@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Helpers\Status;
 use App\Models\NftStar;
 use App\Models\NftTier;
+use App\Helpers\Moralis;
 use App\Helpers\DateTime;
 use App\Models\GameHistory;
 use App\Observers\NftObserver;
