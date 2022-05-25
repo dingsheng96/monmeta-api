@@ -27,6 +27,7 @@ class TransactionResource extends JsonResource
         ];
 
         if ($this->type == Transaction::TYPE_PURCHASE_NFT && !empty($this->nft_id)) {
+            $this->load('nft');
             $data = array_merge($data, (new NftResource($this->nft))->toArray($request));
         }
 

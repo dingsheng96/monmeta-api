@@ -38,8 +38,8 @@ class TransactionService extends BaseService
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
                 'transaction_date' => $transaction['block_timestamp'],
                 'decimals' => 18, // ERC20
-                'usdt' => $this->request->get('usdt_value', 0),
-                'mspc' => $this->request->get('mspc_value', 0),
+                'usdt' => $this->request->get('usdtValue', 0),
+                'mspc' => $this->request->get('mspcValue', 0),
             ];
 
             if (!empty($this->request->get('nftId'))) {
