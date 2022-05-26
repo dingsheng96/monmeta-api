@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Transaction;
 
 use App\Models\Transaction;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTransactionRequest extends FormRequest
@@ -26,7 +27,9 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             'transactionHash' => [
-                'required', 'string'
+                'required', 'string',
+                Rule::unique(Transaction::class, 'hash_id')
+                    ->whereNull('deleted_at')
             ],
             'type' => [
                 'required', 'string'

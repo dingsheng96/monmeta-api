@@ -25,8 +25,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'wallet_id', 'first_name', 'last_name', 'username',
-        'email', 'nationality_id', 'contact_no',
-        'total_purchase', 'total_prize_claim', 'balance'
+        'email', 'nationality_id', 'contact_no', 'decimals',
+        'usdt_total_purchase', 'usdt_total_prize_claim', 'usdt_balance',
+        'mspc_total_purchase', 'mspc_total_prize_claim', 'mspc_balance',
     ];
 
     /**
@@ -94,32 +95,32 @@ class User extends Authenticatable
 
     public function getFormattedUsdtTotalPrizesAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_total_prizes, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_total_prizes, $this->decimals);
     }
 
     public function getFormattedUsdtTotalBuyInAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_total_buy_in, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_total_buy_in, $this->decimals);
     }
 
     public function getFormattedUsdtProfitLossAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_profit_loss, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_profit_loss, $this->decimals);
     }
 
     public function getFormattedUsdtTotalPurchaseAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_total_purchase, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_total_purchase, $this->decimals);
     }
 
     public function getFormattedUsdtTotalPrizeClaimAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_total_prize_claim, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_total_prize_claim, $this->decimals);
     }
 
     public function getFormattedUsdtBalanceAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->usdt_balance, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt_balance, $this->decimals);
     }
 
     public function getMspcTotalPrizesAttribute(): int
@@ -147,31 +148,31 @@ class User extends Authenticatable
 
     public function getFormattedMspcTotalPrizesAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_total_prizes, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_total_prizes, $this->decimals);
     }
 
     public function getFormattedMspcTotalBuyInAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_total_buy_in, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_total_buy_in, $this->decimals);
     }
 
     public function getFormattedMspcProfitLossAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_profit_loss, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_profit_loss, $this->decimals);
     }
 
     public function getFormattedMspcTotalPurchaseAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_total_purchase, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_total_purchase, $this->decimals);
     }
 
     public function getFormattedMspcTotalPrizeClaimAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_total_prize_claim, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_total_prize_claim, $this->decimals);
     }
 
     public function getFormattedMspcBalanceAttribute(): string
     {
-        return (new Price())->getPriceInDecimals($this->mspc_balance, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc_balance, $this->decimals);
     }
 }

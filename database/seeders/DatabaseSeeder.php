@@ -21,12 +21,5 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             TierSeeder::class
         ]);
-
-        Transaction::with('user')->get()
-            ->each(function ($transaction) {
-                (new UserService())
-                    ->setModel($transaction->user)
-                    ->updateUserFinancialInfo();
-            });
     }
 }

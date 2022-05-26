@@ -3,15 +3,11 @@
 namespace App\Support\Services;
 
 use App\Models\Nft;
-use App\Models\Game;
 use App\Models\User;
-use App\Helpers\Price;
 use App\Helpers\Status;
 use App\Helpers\Moralis;
-use App\Models\GameHistory;
 use App\Models\Transaction;
 use App\Support\Services\BaseService;
-use Symfony\Component\HttpFoundation\Response;
 
 class TransactionService extends BaseService
 {
@@ -37,7 +33,7 @@ class TransactionService extends BaseService
                 'hash_id' => $transaction['hash'],
                 'status' => $transaction['receipt_status'] == '1' ? Status::STATUS_SUCCESS : Status::STATUS_FAIL,
                 'transaction_date' => $transaction['block_timestamp'],
-                'decimals' => 18, // ERC20
+                'decimals' => env('TOKEN_DECIMALS'),
                 'usdt' => $this->request->get('usdtValue', 0),
                 'mspc' => $this->request->get('mspcValue', 0),
             ];

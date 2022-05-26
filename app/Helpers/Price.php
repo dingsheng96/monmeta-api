@@ -13,8 +13,13 @@ class Price
         return compact('value_in_cents', 'decimals_count');
     }
 
-    public function getPriceInDecimals(int $value, int $decimals_count = 0): string
+    public function getPriceInDecimals($value, int $decimals_count = 0): float
     {
-        return number_format(($value / str_pad('1', $decimals_count + 1, '0', STR_PAD_RIGHT)), $decimals_count, '.', '');
+        return (float) ($value / str_pad('1', $decimals_count + 1, '0', STR_PAD_RIGHT));
+    }
+
+    public function getPriceInInteger($value, int $decimals_count = 0): string
+    {
+        return bcmul((string) $value, str_pad('1', $decimals_count + 1, '0', STR_PAD_RIGHT));
     }
 }

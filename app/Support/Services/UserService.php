@@ -53,8 +53,10 @@ class UserService extends BaseService
         return false;
     }
 
-    public function updateUserFinancialInfo(int $decimals = 18)
+    public function updateUserFinancialInfo()
     {
+        $this->model->decimals = env('TOKEN_DECIMALS');
+
         $this->model->usdt_total_purchase = $this->model->usdt_total_buy_in;
         $this->model->usdt_total_prize_claim = $this->model->usdt_total_prizes;
         $this->model->usdt_balance = $this->model->usdt_profit_loss;
@@ -62,8 +64,6 @@ class UserService extends BaseService
         $this->model->mspc_total_purchase = $this->model->mspc_total_buy_in;
         $this->model->mspc_total_prize_claim = $this->model->mspc_total_prizes;
         $this->model->mspc_balance = $this->model->mspc_profit_loss;
-
-        $this->model->decimals = $decimals;
 
         if ($this->model->isDirty()) {
             $this->model->save();

@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Helpers\Status;
 use App\Models\NftStar;
 use App\Models\NftTier;
-use App\Helpers\Moralis;
 use App\Helpers\DateTime;
 use App\Models\GameHistory;
 use App\Observers\NftObserver;
@@ -135,7 +134,11 @@ class Nft extends Model
 
     public function getWinningRateAttribute()
     {
-        return ($this->average_score * 100) . '%';
+        if ($this->average_score > 0 && $this->total_play_count > 0) {
+            return number_format((($this->average_score / $this->total_play_count) * 100), 2, '.', '') . '%';
+        }
+
+        return number_format(($this->average_score * 100), 2, '.', '') . '%';
     }
 
     public function getCurrentStarsWithTierStarsAttribute()

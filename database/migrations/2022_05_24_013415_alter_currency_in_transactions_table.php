@@ -15,8 +15,9 @@ class AlterCurrencyInTransactionsTable extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('mspc')
+            $table->double('mspc', 36, 18)
                 ->default(0)
+                ->unsigned()
                 ->after('amount');
 
             $table->renameColumn('amount', 'usdt');

@@ -23,9 +23,9 @@ class AlterFinancialInfoInUsersTable extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('mspc_balance')->default(0)->after('usdt_balance');
-            $table->unsignedBigInteger('mspc_total_prize_claim')->default(0)->after('usdt_balance');
-            $table->unsignedBigInteger('mspc_total_purchase')->default(0)->after('usdt_balance');
+            $table->double('mspc_balance', 36, 18)->default(0)->after('usdt_balance');
+            $table->double('mspc_total_prize_claim', 36, 18)->unsigned()->default(0)->after('usdt_balance');
+            $table->double('mspc_total_purchase', 36, 18)->unsigned()->default(0)->after('usdt_balance');
         });
     }
 

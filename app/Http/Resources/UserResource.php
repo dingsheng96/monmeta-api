@@ -27,17 +27,16 @@ class UserResource extends JsonResource
         ];
 
         if ($this->relationLoaded('transactions')) {
-
             $data += [
                 'usdt' => [
-                    'totalPrizes' => strval($this->formatted_usdt_total_prizes),
-                    'totalBuyIn' => strval($this->formatted_usdt_total_buy_in),
-                    'profitLoss' => strval($this->formatted_usdt_profit_loss)
+                    'totalPrizes' => $this->formatted_usdt_total_prizes,
+                    'totalBuyIn' => $this->formatted_usdt_total_buy_in,
+                    'profitLoss' => $this->formatted_usdt_profit_loss
                 ],
                 'mspc' => [
-                    'totalPrizes' => strval($this->formatted_mspc_total_prizes),
-                    'totalBuyIn' => strval($this->formatted_mspc_total_buy_in),
-                    'profitLoss' => strval($this->formatted_mspc_profit_loss)
+                    'totalPrizes' => $this->formatted_mspc_total_prizes,
+                    'totalBuyIn' => $this->formatted_mspc_total_buy_in,
+                    'profitLoss' => $this->formatted_mspc_profit_loss
                 ]
             ];
         }

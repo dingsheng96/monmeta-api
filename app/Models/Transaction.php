@@ -90,13 +90,23 @@ class Transaction extends Model
     }
 
     // attributes
+    public function setUsdtAttribute($value)
+    {
+        $this->attributes['usdt'] = (new Price())->getPriceInDecimals($value, env('TOKEN_DECIMALS'));
+    }
+
+    public function setMspcAttribute($value)
+    {
+        $this->attributes['mspc'] = (new Price())->getPriceInDecimals($value, env('TOKEN_DECIMALS'));
+    }
+
     public function getFormattedUsdtAttribute()
     {
-        return (new Price())->getPriceInDecimals($this->usdt, $this->decimals);
+        return (new Price())->getPriceInInteger($this->usdt, $this->decimals);
     }
 
     public function getFormattedMspcAttribute()
     {
-        return (new Price())->getPriceInDecimals($this->mspc, $this->decimals);
+        return (new Price())->getPriceInInteger($this->mspc, $this->decimals);
     }
 }
