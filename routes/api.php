@@ -1,7 +1,10 @@
 <?php
 
+use App\Helpers\Moralis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +50,11 @@ Route::namespace('Api')
                         Route::post('store', 'NftController@store');
                     });
             });
+    });
+
+Route::prefix('artisan')
+    ->group(function () {
+        Route::get('optimize-clear', function () {
+            Artisan::call('optimize:clear');
+        });
     });
