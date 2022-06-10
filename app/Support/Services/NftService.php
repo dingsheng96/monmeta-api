@@ -159,12 +159,13 @@ class NftService extends BaseService
             ->getUserNftDetails($this->request->user()->wallet_id, $this->model->token_id);
 
         if (!empty($nftDetail)) {
-            $metaData = json_decode($nftDetail['metadata']);
-
-            $this->model->image = $metaData->image;
-            $this->model->properties = $metaData;
-            if ($this->model->isDirty()) {
-                $this->model->save();
+            $metaData = json_decode($nftDetail['metadata'] ?? []);
+            if (empty($metaData)) {
+                $this->model->image = $metaData->image;
+                $this->model->properties = $metaData;
+                if ($this->model->isDirty()) {
+                    $this->model->save();
+                }
             }
         }
 

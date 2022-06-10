@@ -8,6 +8,7 @@ use App\Helpers\Status;
 use App\Helpers\Moralis;
 use App\Models\Transaction;
 use App\Support\Services\BaseService;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransactionService extends BaseService
 {
@@ -21,6 +22,8 @@ class TransactionService extends BaseService
         $transaction = (new Moralis())
             ->setChain($this->request->get('chain'))
             ->getTransaction($this->request->get('transactionHash'));
+
+        throw_if($transaction == false, new \Exception("Moralis transaction api error", Response::HTTP_INTERNAL_SERVER_ERROR));
 
         if ($transaction) {
 

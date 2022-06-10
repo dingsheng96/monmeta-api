@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Nft;
 use App\Traits\HasApiLog;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +53,9 @@ class Moralis
             return $response->json();
         }
 
-        throw new \Exception($response->body(), Response::HTTP_OK);
+        Log::error("Return from Moralis [Transaction] - " . json_encode($response->json(), JSON_UNESCAPED_UNICODE));
+
+        return false;
     }
 
     public function getUserNftList(string $walletId): array
