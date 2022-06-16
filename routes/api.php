@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Artisan;
 
 Route::namespace('Api')
     ->prefix('v1')
+    ->middleware(['cors.enabled'])
     ->group(function () {
 
         Route::get('oAuth2', 'TokenController@getOAuth2Token');
